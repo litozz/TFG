@@ -1434,7 +1434,7 @@
 						document.getElementById("act-estate-algorithm-name").textContent="Estado actual del grafo: Escalada por la máxima pendiente.";
 	                    break;
 
-					case "simulated-annealing":
+					/*case "simulated-annealing":
 						simulated_annealing(nodes,edges,initial_node_id,end_nodes_id,iter_bound);
 						document.getElementById("act-estate-algorithm-name").textContent="Estado actual del grafo: Enfriamiento simulado.";
 	                    break;
@@ -1443,6 +1443,7 @@
 	                case "test-algorithm":
 	                	test_algorithm(nodes,edges,initial_node_id,end_nodes_id,iter_bound);
 	                	break;
+                    */
 	            }
 
 	            $("#select-algorithm").fadeOut("fast");
@@ -1705,8 +1706,8 @@
                     <option value="retroactive-search">Búsqueda retroactiva</option>			<!--IMPLEMENTADO-->
                     <option value="simple-climbing">Escalada simple</option>					<!--IMPLEMENTADO-->
                     <option value="max-climbing">Escalada por la máxima pendiente</option>		<!--IMPLEMENTADO-->
-                    <option value="simulated-annealing">Enfriamiento simulado</option>
-                    <option value="test-algorithm">TEST</option>    
+                    <!--<option value="simulated-annealing">Enfriamiento simulado</option>
+                    <option value="test-algorithm">TEST</option>-->    
                 </select>
 
                 <button id="solve-button" onclick="solveNetwork();">Resolver</button><br/>

@@ -48,7 +48,7 @@ function isTupleInList(tuple,list){
 	return -1;
 }
 
-//NO UTILIZADA AUN
+
 function isDadSonInList(tuple,list){
 	for(var i=0;i<list.length;i++){
 		if(list[i][0]==tuple[0] && list[i][1]==tuple[1]){
@@ -67,6 +67,7 @@ function isInList(elem,lst){
 	}
 	return -1;
 }
+
 
 
 //Trabaja con indices
@@ -99,7 +100,7 @@ function getNthSonNode(adj_mat,dad_node,n){
 
 
 
-
+//NO USADA
 //Trabaja con indices
 function getAllDadNodes(adj_mat,son_node){
 	dad_nodes=[];
@@ -3051,150 +3052,6 @@ function astar_original(network_edges,node_ids,node_heuristics,nodo_inicial,nodo
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//function retroactive_search(nodes,edges,initial_node_id,end_nodes_id){alert("Se ha llamado a busqueda retroactiva");}
-//function iterarive_descent(nodes,edges,initial_node_id,end_nodes_id){alert("Se ha llamado a descenso iterativo");}
-//function uniform_cost(nodes,edges,initial_node_id,end_nodes_id){alert("Se ha llamado a coste uniforme (dijkstra)");}
-//function simple_climbing(nodes,edges,initial_node_id,end_nodes_id){alert("Se ha llamado a escalado simple");}
-//function max_climbing(nodes,edges,initial_node_id,end_nodes_id){alert("Se ha llamado a escalado por la maxima pendiente");}
-function simulated_annealing(nodes,edges,initial_node_id,end_nodes_id){alert("Se ha llamado a enfriamiento simulado");}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
