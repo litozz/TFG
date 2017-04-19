@@ -12,6 +12,6 @@ With this web app you will learn how to apply searching algorithms to diverse ne
 * Max slope climbing
 * A*
 
-For A\* also, you can generate non admisible heuristics that trigger the number of updates in close nodes list you want, if it's possible.
+For A\* also, you can generate non admisible heuristics that trigger the number of updates in close nodes list you want into a custom range, if it's possible.
 
 The library I use for draw network is __vis.js__, available on: http://visjs.org/ (Dual licensed Apache/MIT)
