@@ -149,8 +149,11 @@
 			$("#node-id").val("");
             $("#node-heuristic").val("");
             
-            if(!initial_exists){
+            if(!initial_exists){//Si el nodo inicial NO existe
             	$("#cb_initial_node").attr("disabled", false);
+            	$("#cb_initial_node").attr("checked", false);
+            }else{
+            	$("#cb_initial_node").attr("disabled", true);
             	$("#cb_initial_node").attr("checked", false);
             }
 
@@ -378,18 +381,21 @@
 	            try {
                     heur=Number(document.getElementById('node-heuristic').value)
 	                if(document.getElementById('cb_initial_node').checked && !document.getElementById('cb_final_node').checked){ //Si es nodo inicial
-	                	initial_node_id=document.getElementById('node-id').value;
-	                	document.getElementById('cb_initial_node').checked=false;
-	                	nodes.add({
-	                    	id: document.getElementById('node-id').value,
-	                    	label: document.getElementById('node-id').value+"\n(H="+heur+")",
-                            title: heur, //En title guardaremos la heuristica del nodo
-	                    	color: "red"
-	                    	//label: document.getElementById('node-label').value
-	                	});
-	                	initial_exists=true;
-	                	document.getElementById('cb_initial_node').disabled=true;
-	                
+	                	if(!initial_exists){
+		                	initial_node_id=document.getElementById('node-id').value;
+		                	document.getElementById('cb_initial_node').checked=false;
+		                	nodes.add({
+		                    	id: document.getElementById('node-id').value,
+		                    	label: document.getElementById('node-id').value+"\n(H="+heur+")",
+	                            title: heur, //En title guardaremos la heuristica del nodo
+		                    	color: "red"
+		                    	//label: document.getElementById('node-label').value
+		                	});
+		                	initial_exists=true;
+		                	document.getElementById('cb_initial_node').disabled=true;
+	                	}else{
+	                		alert("El nodo inicial ya está definido. Si el checkbox de nodo inicial esta activado es porque tiene el nodo inicial seleccionado. Desactivelo pinchando en un nodo intermedio o en cualquier zona del grafo donde no haya nodo");
+	                	}
 
 
                     }else if(!document.getElementById('cb_initial_node').checked && document.getElementById('cb_final_node').checked){
@@ -503,15 +509,24 @@
 	                
 
                     }else{
+	                	var id_nodo=document.getElementById('node-id').value;
 	                	nodes.update({
-	                   		id: document.getElementById('node-id').value,
-	                    	label: document.getElementById('node-id').value+"\n(H="+heur+")",
-                            title: heur
+	                   		id: id_nodo,
+	                    	label: id_nodo+"\n(H="+heur+")",
+                            title: heur,
+                            color: {background:'#97C2FC', border:'#2B7CE9',highlight:{background:'#D2E5FF',border:'#2B7CE9'}}
 	                    	//label: document.getElementById('node-label').value
 	                	});
+
+	                	var index_in_finals=end_nodes_id.indexOf(id_nodo)
+	                	if(index_in_finals!=-1){
+	                		end_nodes_id.splice(index_in_finals,1); //Eliminar el nodo del array de nodos finales si era final
+	                	}
+	                	
+	                	
 	                }
 
-	                index_nodo=node_ids.indexOf(document.getElementById('node-id').value);
+	                index_nodo=node_ids.indexOf(id_nodo);
 	                node_heuristics[index_nodo]=Number(document.getElementById('node-heuristic').value);
 
 
@@ -1587,8 +1602,8 @@
 			
 			<br/>				
 			
-			<input type="radio" name="initial" id="cb_initial_node" value="initial">Es nodo inicial <br/>
-			<input type="radio" name="initial" id="cb_final_node" value="end">Es nodo final<br/>
+			<input type="checkbox" name="initial" id="cb_initial_node" value="initial">Es nodo inicial <br/>
+			<input type="checkbox" name="initial" id="cb_final_node" value="end">Es nodo final<br/>
 							
 			<button id="node-add" onclick="addNode();">Insertar</button>
 			<button id="node-update" onclick="updateNode();">Actualizar</button>
