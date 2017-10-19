@@ -920,7 +920,7 @@ class Interface_Handler{
 		$("#despliegue_dibujar").click(function(){
 			$("#import-network-div").hide();
 			$("#network-form-div").toggle("slow");
-			$("#heuristic_generation").hide();
+			$("#heuristic-generation").hide();
 			$("#resolution").hide();
 			//Si cierro el apartado de resolucion tengo que volver a activar el modulo para ir a resolver grafo
 			$("#end-network").fadeIn("slow");
@@ -930,7 +930,7 @@ class Interface_Handler{
 		$("#despliegue_importar").click(function(){
 			$("#network-form-div").hide();
 			$("#import-network-div").toggle("slow");
-			$("#heuristic_generation").hide();
+			$("#heuristic-generation").hide();
 			$("#resolution").hide();
 			//Si cierro el apartado de resolucion tengo que volver a activar el modulo para ir a resolver grafo
 			$("#end-network").fadeIn("slow");

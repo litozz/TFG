@@ -1,0 +1,21 @@
+17/06/17:
+	- Se ha decidido cambiar el orden de las explicaciones en forma de pila. Creo que es más útil si el último paso del algoritmo se coloca el primero en la lista de explicaciones. De esta manera el usuario se ahorra hacer scroll para leer la última explicación.
+
+	- Se ha añadido una fase de propagación a A* y Costo uniforme. Cuando se produce una actualización en cerrados se comprueban todos los nodos en cerrados que dependen de esta actualización y se le aplica también la reducción de coste. Del mismo modo, cuando un nodo entra en cerrados desde abiertos, se comprueba que el camino hacia él tiene el coste que marca el nodo, en caso contrario se sabe que es él quien falla y se le aplica la suma del coste de llegar a su padre y desde su padre hasta a él. De este modo se mantiene la coherencia y cohesión de los algoritmos en todo momento.
+
+	- Se ha añadido una restricción a búsqueda por Descenso Iterativo y es un campo de profundidad. El usuario puede configurar la profundidad máxima a la que llega el algoritmo y puede comprobar cómo, cambiando este parámetro, el algoritmo alcanza o no llega a la profundidad de la solución. No es como un algoritmo más, pero creo que ilustra mucho más la filosofía de este algoritmo.  
+
+
+18/06/17:
+	- Mejorada la generación de heurística admisible. A los nodos que no pueden llegar a nodo final se le asigna el máximo valor heurístico encontrado. De este modo, el algoritmo tiende a rechazarlos.
+
+	- Eliminación de la búsqueda de múltiples padres en A* y Costo Uniforme, porque sólo puede haber un nodo en abiertos y cerrados con su mejor padre hasta el momento. No es necesario buscar si hay más padres en la lista.
+
+	- Se ha limpiado el código de lineas comentadas.
+	
+
+21/06/17
+	
+	- Corregido un bug por el que no se dibujaban las aristas bidireccionales si estaban como de A a B y el algoritmo las solicitaba como de B a A, en algoritmos de escalada y descenso iterativo.
+
+	- Añadido un contador de pasos en cada algoritmo. Ahora se puede delimitar las acciones realizadas en cada paso con sólo un vistazo.
