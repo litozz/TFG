@@ -5,41 +5,31 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Algoritmos de Búsqueda informada en inteligencia artificial.</title>
+    <title data-translate="translate-title">Algoritmos de Búsqueda informada en inteligencia artificial.</title>
 
     <script type="text/javascript" src="vis-4.18.1/dist/vis.js"></script>
     <!--<script src="./jquery.min.js"></script>importar jQuery-->
     <link href="../../../dist/vis-network.min.css" rel="stylesheet" type="text/css"/>
-    
-    <script type="text/javascript" src="./grafo.js"></script>
-    <script type="text/javascript" src="./algorithms.js"></script> <!--biblioteca algoritmos--> 
-    <script type="text/javascript" src="./interface_handler.js"></script> <!--manejador de interfaz-->
-
+    <script type="text/javascript" src="./js/grafo.js"></script>
+    <script type="text/javascript" src="./js/algorithms.js"></script> <!--biblioteca algoritmos--> 
+    <script type="text/javascript" src="./js/interface_handler.js"></script> <!--manejador de interfaz-->
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
 	<!-- jQuery library -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<!-- Latest compiled JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
-    
-	<script type="text/javascript">
-		//Function for change active tabs in topmenu.
-		$(document).ready(function () {
-		    $('nav li a').click(function(e) {
-		    	//Remove active class to actual active <li>
-				$('nav li.selected').removeClass('selected');
-				//Get the li element parten of this (this is an <a> tag)
-				var $parent = $(this).parent();
-				//Added active class to correct <li> element
-				$parent.addClass('selected');
-				//If prevent default is called, default event (href) will not take effect.
-				e.preventDefault();
-		    });
-		});
-	</script>
 
-	<link rel="stylesheet" type="text/css" href="estilo.css">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+	<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script>-->
+
+	<link rel="stylesheet" type="text/css" href="./css/estilo.css">
     
 </head>
 
@@ -50,14 +40,18 @@
 		<div class="container-fluid row upper-menu">
 			<div class="col-md-3 upper-menu-title">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="./index.html">IA Searching Algorithms</a>
+					<a class="navbar-brand" href="./index.html" data-translate="translate-navbar-brand">Algoritmos de búsqueda en IA</a>
 				</div>
 			</div>
 			<div class="col-md-5 upper-menu-options">
-				<ul class="nav navbar-nav">
-					<li><a id="despliegue_dibujar">Dibujar/Editar Grafo</a></li>
-					<li><a id="despliegue_importar">Importar Grafo</a></li>
-				</ul>
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<ul class="nav navbar-nav">
+							<li><a id="despliegue_dibujar" data-translate="translate-draw-edit-network">Dibujar/Editar grafo</a></li>
+							<li><a id="despliegue_importar" data-translate="translate-import-network">Importar grafo</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="row">
@@ -80,13 +74,39 @@
 				</a>
 			</div>-->
 		</div>
-		<div class="container-fluid sub-menu-options">
-			<ul class="nav nav-tabs">
-				<li><a id="export-network" onclick="ih.exportNetwork();">Exportar grafo</a></li>
-				<li><a id="generate-heuristic" onclick="ih.showDivGenerateHeuristic();">Generar Heurística</a></li>
-				<li><a id="end-network" onclick="ih.goResolutionMode();">Ir al modo resolver grafo</a></li>
-				<li><a id="close-resolution-mode" onclick="ih.closeResolutionMode();">Cerrar modo resolver grafo</a></li>
-			</ul>
+		<div class="row">
+			<div class="col-md-10">
+				<div class="container-fluid sub-menu-options">
+					<ul class="nav nav-tabs">
+						<li><a id="export-network" onclick="ih.exportNetwork();" data-translate="translate-export-network">Exportar grafo</a></li>
+						<li><a id="generate-heuristic" onclick="ih.showDivGenerateHeuristic();" data-translate="translate-generate-heuristic">Generar Heurística</a></li>
+						<li><a id="end-network" onclick="ih.goResolutionMode();" data-translate="translate-go-solve-mode">Ir al modo resolver grafo</a></li>
+						<li><a id="close-resolution-mode" onclick="ih.closeResolutionMode();" data-translate="translate-close-solve-mode">Cerrar modo resolver grafo</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="col-md-2">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+							
+							<select id="language-select" class="selectpicker" data-width="fit">
+								<!--<option data-content='<span class="flag-icon flag-icon-mx"></span>'>ES</option>-->
+								<option value="language-en" data-content="<img src='img/United-States-icon.png'></img> EN" selected="selected"></option>
+								<option value="language-es" data-content="<img src='img/Spain-icon.png'></img> ES"></option>
+							</select>
+					</div>
+				</div>
+				<!--<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li><a href="#">es</a></li>
+						<li><a href="#">en</a></li>
+					</ul>
+				</div>--> 
+
+			</div>
 		</div>
 	</nav>
 <!--<nav>
@@ -121,7 +141,7 @@
 			<div class="row">
 				<div class="alert alert-info alert-dismissable fade in">
 					<a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					<p>Introduzca los parámetros necesarios para crear el grafo. En este modo de creación podemos crear un grafo añadiendo los nodos y las uniones uno a uno.</p>
+					<p data-translate="translate-info-draw-network">Introduzca los parámetros necesarios para crear el grafo. En este modo de creación podemos crear un grafo añadiendo los nodos y las uniones uno a uno.</p>
 				</div>
 				<!--<div class="col-md-12">
 					<p>Introduzca los parámetros necesarios para crear el grafo. En este modo de creación podemos crear un grafo añadiendo los nodos y las uniones uno a uno.</p>
@@ -129,9 +149,9 @@
 			</div>
 			<div class="row">
 				<div id="network-form-div-node" class="col-md-6 form-group">
-					<h2>Nodo</h2>
+					<h2 data-translate="translate-node-form-header">Nodo</h2>
 					<div class="row">
-						<label for="node-id" class="control-label col-md-6">Identificador del nodo</label>
+						<label for="node-id" class="control-label col-md-6" data-translate="translate-node-form-id">Identificador del nodo</label>
 						<div class="col-sm-6">
 							<!--<input type="email" class="form-control" id="email" placeholder="Enter email" name="email">-->
 							<input id="node-id" type="text" value="" class="form-control">
@@ -139,37 +159,53 @@
 					</div>
 					
 					<div class="row">				
-						<label for="node-heuristic" class="control-label col-md-6">Valor heurístico</label>
+						<label for="node-heuristic" class="control-label col-md-6" data-translate="translate-node-form-heuristic-value">Valor heurístico</label>
 						<div class="col-sm-6">
 							<input id="node-heuristic" type="number" min="0" value="" class="form-control">
 						</div>
 					</div>
 					
 					<div class="checkbox">
-						<label><input type="checkbox" name="initial" id="cb_initial_node" value="initial">Es nodo inicial</label>
+						<label><input type="checkbox" name="initial" id="cb_initial_node" value="initial">
+							<span data-translate="translate-node-form-is-initial">Es nodo inicial</span>
+						</label>
 					</div>
 					
 					<div class="checkbox">
-						<label><input type="checkbox" name="initial" id="cb_final_node" value="end">Es nodo final</label>
+						<label><input type="checkbox" name="initial" id="cb_final_node" value="end">
+							<span data-translate="translate-node-form-is-end">Es nodo final</span>
+						</label>
 					</div>
 
-					<button id="node-add" onclick="ih.addNode();" class="btn btn-primary">Insertar</button>
-					<button id="node-update" onclick="ih.updateNode();" class="btn btn-primary">Actualizar</button>
-					<button id="node-remove" onclick="ih.removeNode();" class="btn btn-primary btn-danger">Eliminar</button>
+					<button id="node-add" onclick="ih.addNode();" class="btn btn-primary"> 
+						<span data-translate="translate-insert">Insertar</span>
+					</button>
+					<button id="node-update" onclick="ih.updateNode();" class="btn btn-primary">
+						<span data-translate="translate-update">Actualizar</span>
+					</button>
+					<button id="node-remove" onclick="ih.removeNode();" class="btn btn-primary btn-danger">
+						<span data-translate="translate-delete">Eliminar</span>
+					</button>
 				</div>
 
 				<div id="network-form-div-edge" class="col-md-6 form-group">
-					<h2>Arista</h2>
+					<h2>
+						<span data-translate="translate-edge-form-header">Arista</span>
+					</h2>
 
 					<div class="row">
-						<label for="edge-from" class="control-label col-md-6">Desde</label>
+						<label for="edge-from" class="control-label col-md-6">
+							<span data-translate="translate-edge-form-from">Desde (ID de nodo)</span>
+						</label>
 						<div class="col-sm-6">
 							<input id="edge-from" type="text" value="" class="form-control">
 						</div>
 					</div>
 					
 					<div class="row">
-						<label for="edge-to" class="control-label col-md-6">Hasta</label>
+						<label for="edge-to" class="control-label col-md-6">
+							<span data-translate="translate-edge-form-to">Hasta (ID de nodo)</span>
+						</label>
 						<div class="col-sm-6">
 							<input id="edge-to" type="text" value="" class="form-control">
 						</div>
@@ -177,19 +213,29 @@
 
 
 					<div class="row">
-						<label for="edge-cost" class="control-label col-md-6">Coste</label>
+						<label for="edge-cost" class="control-label col-md-6">
+							<span data-translate="translate-edge-form-cost">Coste</span>
+						</label>
 						<div class="col-sm-6">
 							<input id="edge-cost" type="number" min="0" value="" class="form-control">
 						</div>
 					</div>											
 					
 					<div class="checkbox">
-						<label><input type="checkbox" id="cb_directed_edge" value="directed">Es arista dirigida</label>
+						<label><input type="checkbox" id="cb_directed_edge" value="directed">
+							<span data-translate="translate-edge-form-is-directed-edge">Es arista dirigida</span>
+						</label>
 					</div>
 									
-					<button id="edge-add" onclick="ih.addEdge();" class="btn btn-primary">Insertar</button>
-					<button id="edge-update" onclick="ih.updateEdge();" class="btn btn-primary">Actualizar</button>
-					<button id="edge-remove" onclick="ih.removeEdge();" class="btn btn-primary btn-danger">Eliminar</button>
+					<button id="edge-add" onclick="ih.addEdge();" class="btn btn-primary">
+						<span data-translate="translate-insert">Insertar</span>
+					</button>
+					<button id="edge-update" onclick="ih.updateEdge();" class="btn btn-primary">
+						<span data-translate="translate-update">Actualizar</span>
+					</button>
+					<button id="edge-remove" onclick="ih.removeEdge();" class="btn btn-primary btn-danger">
+						<span data-translate="translate-delete">Eliminar</span>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -199,7 +245,7 @@
 			<div class="row">
 				<div class="alert alert-info alert-dismissable fade in">
 					<a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					<p>Importar un archivo. Si previamente exportó un archivo de este generador, puede importarlo desde aquí.</p>
+					<p data-translate="translate-info-import-network">Importar un archivo. Si previamente exportó un archivo de este generador, puede importarlo desde aquí.</p>
 				</div>
 			</div>
 			<div class="row">
@@ -207,7 +253,9 @@
 					<input type="file" id="import-network-input" name="datafile" class="btn btn-default btn-file"/>
 				</div>
 				<div class="col-sm-8">
-					<button id="import-network-btn" onclick="ih.importNetwork();" class="btn btn-primary">Importar grafo</button>
+					<button id="import-network-btn" onclick="ih.importNetwork();" class="btn btn-primary">
+						<span data-translate="translate-import-button">Importar grafo</span>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -222,18 +270,24 @@
 	<div id="resolution">
 		<div class="row">
 			<div class="col-md-12 text-center">
-				<h1>Resolución del grafo</h1>
+				<h1>
+					<span data-translate="translate-resolution-header">Resolución del grafo</span>
+				</h1>
 			</div>
 		</div>
 
 		<div class="row">
 			<div id="actual-state" class="col-md-6">
-				<h3 id="act-estate-algorithm-name">Estado actual del grafo</h3>
+				<h3 id="act-estate-algorithm-name">
+					<span data-translate="translate-resolution-actual-estate">Estado actual del grafo</span>
+				</h3>
                 <div id="solution_network" class="network_box"></div>
                 <div class="alert alert-info alert-dismissable fade in">
 					<a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
 					<p>
-					Los nodos <span class="info_color_ini">rojos</span> indican <span class="info_color_ini">nodos iniciales</span>.<br>Los nodos <span class="info_color_fin">verdes</span> indican <span class="info_color_fin">nodos finales</span>.<br>
+						<span data-translate="translate-resolution-info">
+							Los nodos <span class="info_color_ini">rojos</span> indican <span class="info_color_ini">nodos iniciales</span>.<br>Los nodos <span class="info_color_fin">verdes</span> indican <span class="info_color_fin">nodos finales</span>.
+						</span>
 					</p>
 				</div>
 			</div>
@@ -242,17 +296,19 @@
 			<div id="select-algorithm" class="col-md-6">
 				<h2>&nbsp;</h2>
 				<div class="row">
-					<label for="algorithm-select" class="control-label col-md-6">Algoritmo de búsqueda: </label>
+					<label for="algorithm-select" class="control-label col-md-6">
+						<span data-translate="translate-resolution-algorithm">Algoritmo de búsqueda: </span>
+					</label>
 					<div class="col-md-6">
 						<select id="algorithm-select" onchange="ih.checkMaxProf();" class="form-control">
-							<option value="deep-search">Búsqueda en profundidad</option> 				
-							<option value="wide-search">Búsqueda en anchura</option>					
-							<option value="iterative-descent">Descenso iterativo</option>				
-							<option value="astar">A*</option>											
-							<option value="uniform-cost">Búsqueda de costo uniforme (Dijkstra)</option>	
-							<option value="retroactive-search">Búsqueda retroactiva</option>			
-							<option value="simple-climbing">Escalada simple</option>					
-							<option value="max-climbing">Escalada por la máxima pendiente</option>		   
+							<option value="deep-search" data-translate="translate-resolution-option-deep-search">Búsqueda en profundidad</option> 				
+							<option value="wide-search" data-translate="translate-resolution-option-wide-search">Búsqueda en anchura</option>					
+							<option value="iterative-descent" data-translate="translate-resolution-option-iterative-descent">Descenso iterativo</option>				
+							<option value="astar" data-translate="translate-resolution-option-a-star">A*</option>											
+							<option value="uniform-cost" data-translate="translate-resolution-option-uniform-cost">Búsqueda de costo uniforme (Dijkstra)</option>	
+							<option value="retroactive-search" data-translate="translate-resolution-option-retroactive-search">Búsqueda retroactiva</option>			
+							<option value="simple-climbing" data-translate="translate-resolution-option-simple-climbing">Escalada simple</option>					
+							<option value="max-climbing" data-translate="translate-resolution-option-max-climbing">Escalada por la máxima pendiente</option>		   
 						</select>
 					</div>
 				</div>
@@ -261,20 +317,26 @@
 				<div class="row"><div class="col-md-12">&nbsp;</div></div>
 
 				<div class="row">
-					<label for="max_iter_bound" class="control-label col-md-6"> Limite de iteraciones: </label>
+					<label for="max_iter_bound" class="control-label col-md-6"> 
+						<span data-translate="translate-resolution-iteration-limit">Limite de iteraciones: </span>
+					</label>
 					<div class="col-sm-6">
 						<input id="max_iter_bound" type="number" min="1" max="1000" value="" class="form-control" required>
 					</div>
 				</div>
 				
 				<div id="max_prof_div" class="row">
-					<label for="max_prof" class="control-label col-md-6"> Profundidad máxima: </label>
+					<label for="max_prof" class="control-label col-md-6"> 
+						<span data-translate="translate-resolution-max-depth">Profundidad máxima: </span>
+					</label>
 					<div class="col-sm-6">
 						<input id="max_prof" type="number" min="1" max="50" value="" class="form-control">
 					</div>
 				</div>
 
-				<button id="solve-button" onclick="ih.solveNetwork();" class="btn btn-success btn-lg">Resolver</button><br/>
+				<button id="solve-button" onclick="ih.solveNetwork();" class="btn btn-success btn-lg">
+					<span data-translate="translate-resolution-solve">Resolver</span>
+				</button><br/>
 				
 			</div>
 			
@@ -283,47 +345,60 @@
 				<h2>&nbsp;</h2>
 				<div class="btn-group">
 					<button id="go-first-step" class="algselectionbtn btn btn-primary" onclick="ih.solutionFirstStep();">
-						<span class="glyphicon glyphicon-repeat"></span>&nbsp;Ir al principio
+						<span class="glyphicon glyphicon-repeat"></span>
+						<span data-translate="translate-resolution-button-start">&nbsp;Ir al principio</span>
 					</button>
 
 					<button id="step-back" class="algselectionbtn btn btn-primary" onclick="ih.solutionStepBack();">
-						<span class="glyphicon glyphicon-backward"></span>&nbsp;Paso atras
+						<span class="glyphicon glyphicon-backward"></span>
+						<span data-translate="translate-resolution-button-backward">&nbsp;Paso atras</span>
 					</button>
 
 					<button id="step-fordward" class="algselectionbtn btn btn-primary" onclick="ih.solutionStepForward();">
-						<span class="glyphicon glyphicon-forward"></span>&nbsp;Paso adelante
+						<span class="glyphicon glyphicon-forward"></span>
+						<span data-translate="translate-resolution-button-forward">&nbsp;Paso adelante</span>
 					</button>
 					
-					
 					<button id="go-last-step" class="algselectionbtn btn btn-primary" onclick="ih.solutionLastStep();">
-						<span class="glyphicon glyphicon-ok"></span>&nbsp;Ir al final
+						<span class="glyphicon glyphicon-ok"></span>
+						<span data-translate="translate-resolution-button-end">&nbsp;Ir al final</span>
 					</button>
 				</div>
 				<textarea id="textarea-openclosed" rows="5" readonly></textarea><br/>
 				<textarea id="textarea-explanation" rows="20" readonly></textarea><br/>
-				<button id="go-select-algorithm" onclick="ih.backToSelectAlgorithm();" class="btn btn-primary">Cambiar el algoritmo</button>
+				<button id="go-select-algorithm" onclick="ih.backToSelectAlgorithm();" class="btn btn-primary">
+					<span data-translate="translate-resolution-button-change-algorithm">Cambiar el algoritmo</span>
+				</button>
 			</div>
 		</div>
 	</div>
+
+
+	<!--SEGUIR TRADUCIENDO DESDE AQUI-->
 
 	<div id="heuristic-generation">
 		<div class="row">
 			<div class="col-md-6">
 				<div class="row">
-					<label for="min-changes-bound" class="control-label col-md-6"> Número mínimo de cambios: </label>
+					<label for="min-changes-bound" class="control-label col-md-6">
+						<span data-translate="translate-heuristic-generation-min-changes">Número mínimo de cambios: </span>
+					</label>
 					<div class="col-md-6">
 						<input id="min-changes-bound" type="number" min="0" max="100" value="" required class="form-control">
 					</div>
 				</div>
 				<div class="row">
-					<label for="max-changes-bound" class="control-label col-md-6"> Número máximo de cambios: </label>
+					<label for="max-changes-bound" class="control-label col-md-6"> 
+						<span data-translate="translate-heuristic-generation-max-changes">Número máximo de cambios: </span>
+					</label>
 					<div class="col-md-6">
 						<input id="max-changes-bound" type="number" min="0" max="100" value="" required class="form-control">
 					</div>
 				</div>
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" name="cb_admisible_heur" id="cb_admisible_heur" value="" onchange="ih.admisibleHeurChange();">Generar heurística admisible
+						<input type="checkbox" name="cb_admisible_heur" id="cb_admisible_heur" value="" onchange="ih.admisibleHeurChange();">
+						<span data-translate="translate-heuristic-generation-admisible-heur">Generar heurística admisible</span>
 					</label>						
 				</div>
 			</div>	
@@ -331,7 +406,9 @@
 		
 		
 		
-		<button id="btn-generate-heuristic" class="algselectionbtn btn btn-primary" onclick="ih.generateHeuristic();">Generar heurística</button>
+		<button id="btn-generate-heuristic" class="algselectionbtn btn btn-primary" onclick="ih.generateHeuristic();">
+			<span data-translate="translate-heuristic-generation-generate-heur">Generar heurística</span>
+		</button>
 		
 	</div>
 
@@ -340,21 +417,29 @@
 	<div id="network-data">
 		<div class="row">
 			<div class="col-md-12 text-center">
-				<h1>Datos del grafo</h1>
+				<h1>
+					<span data-translate="translate-network-data-header">Datos del grafo</span>
+				</h1>
 			</div>
 		</div>
 		<div class="row">
 			<div id="col-network-data" class="col-md-4">
-				<h3>Resto de datos</h3>
+				<h3>
+					<span data-translate="translate-network-rest-data">Resto de datos</span>
+				</h3>
 				<pre id="rest-of-data-div"></pre>
 			</div>
 			<div id="col-network-draw" class="col-md-8">
-				<h3>Representación gráfica del grafo</h3>
+				<h3>
+					<span data-translate="translate-network-graphical-representation">Representación gráfica del grafo</span>
+				</h3>
 	            <div id="network" class="network_box"></div>
 	            <div class="alert alert-info alert-dismissable fade in">
 					<a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
 					<p>
-					Los nodos <span class="info_color_ini">rojos</span> indican <span class="info_color_ini">nodos iniciales</span>.<br>Los nodos <span class="info_color_fin">verdes</span> indican <span class="info_color_fin">nodos finales</span>.<br>
+						<span data-translate="translate-resolution-info">
+							Los nodos <span class="info_color_ini">rojos</span> indican <span class="info_color_ini">nodos iniciales</span>.<br>Los nodos <span class="info_color_fin">verdes</span> indican <span class="info_color_fin">nodos finales</span>.
+						</span>
 					</p>
 				</div>
 			</div>
@@ -390,8 +475,62 @@
 </div>
 
 <footer id="footer" class="footer navbar-fixed-bottom">
-		<p>José Carlos Martínez Velázquez - Trabajo fin de Grado: Algoritmos de Búsqueda informada en inteligencia artificial. Universidad de Granada.</p>
+		<p>
+			<span data-translate="footer">José Carlos Martínez Velázquez - Trabajo fin de Grado: Algoritmos de Búsqueda informada en inteligencia artificial. Universidad de Granada.</span>
+		</p>
 </footer>
+
+
+
+<!-- jQuery-translator library -->
+<script src="js/jqueryTranslator.js"></script>
+
+<script type="text/javascript">
+	//Function for change active tabs in topmenu.
+	/*$(document).ready(function () {
+	    $('nav li a').click(function(e) {
+	    	//Remove active class to actual active <li>
+			$('nav li.selected').removeClass('selected');
+			//Get the li element parten of this (this is an <a> tag)
+			var $parent = $(this).parent();
+			//Added active class to correct <li> element
+			$parent.addClass('selected');
+			//If prevent default is called, default event (href) will not take effect.
+			e.preventDefault();
+	    });
+	});*/
+
+	//This function allows to translate to english by default. Also, select in language dropdown english language 
+	(function(){
+		$('[data-translate]').jqTranslate('json/index',{defaultLang: 'es'});
+		//$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
+		$("#language-select").val("language-en").change();
+	})()
+
+	//This function allows to translate to english on load/reload page. Also, select in language dropdown english language
+	$(window).on('load', function(){
+		$("#language-select").val("language-en").change();
+		//$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
+	});
+
+	
+
+	//This function allows to translate the whole page.
+	$('#language-select').change(function(){
+		var val = $("#language-select").val();
+		switch(val){
+			case 'language-es':	
+				$('[data-translate]').jqTranslate('json/index',{defaultLang:'en',forceLang:'es', asyncLangLoad:false}); 
+				break;
+			case 'language-en':
+				$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
+				break;
+		}
+	});
+
+
+</script>
+
 
 </body>
 </html>
