@@ -33,7 +33,7 @@
     
 </head>
 
-<body onload="ih=new Interface_Handler();">
+<body>
 
 <header>
 	<nav class="navbar navbar-default navbar-fixed-top">
@@ -300,7 +300,7 @@
 						<span data-translate="translate-resolution-algorithm">Algoritmo de búsqueda: </span>
 					</label>
 					<div class="col-md-6">
-						<select id="algorithm-select" onchange="ih.checkMaxProf();" class="form-control">
+						<select id="algorithm-select" onchange="ih.checkMaxProf(); ih.translateCurrentStatus();" class="form-control">
 							<option value="deep-search" data-translate="translate-resolution-option-deep-search">Búsqueda en profundidad</option> 				
 							<option value="wide-search" data-translate="translate-resolution-option-wide-search">Búsqueda en anchura</option>					
 							<option value="iterative-descent" data-translate="translate-resolution-option-iterative-descent">Descenso iterativo</option>				
@@ -500,6 +500,9 @@
 	    });
 	});*/
 
+	//We create the interface handler
+	ih=new Interface_Handler( $('#language-select').val() );
+
 	//This function allows to translate to english by default. Also, select in language dropdown english language 
 	(function(){
 		$('[data-translate]').jqTranslate('json/index',{defaultLang: 'es'});
@@ -520,12 +523,16 @@
 		var val = $("#language-select").val();
 		switch(val){
 			case 'language-es':	
-				$('[data-translate]').jqTranslate('json/index',{defaultLang:'en',forceLang:'es', asyncLangLoad:false}); 
+				$('[data-translate]').jqTranslate('json/index',{defaultLang:'en',forceLang:'es', asyncLangLoad:false});		
 				break;
 			case 'language-en':
 				$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
 				break;
 		}
+		ih.setLanguage(val);
+		ih.printInfo();
+		ih.translateCurrentStatus();
+
 	});
 
 

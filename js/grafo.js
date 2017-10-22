@@ -114,7 +114,7 @@ class Grafo{
 			this.grafo = new vis.Network(container, data, options);
 
 
-		}catch(err){alert(err);}
+		}catch(err){[0];}
 	}
 
 
@@ -223,29 +223,47 @@ class Grafo{
 
 
 	getDescription(){
-		var network_description="Nodos: "+this.node_ids[0]
-		for (var i=1;i<this.node_ids.length;i++){
-			network_description=network_description+","+this.node_ids[i];
-		}
+		var network_description={language_es:"Por favor, dibuje o importe un grafo.",language_en:"Please, draw or import a network."};
+		if(this.node_ids[0]!=undefined){
+			var network_description={language_es:"",language_en:""};
+			network_description['language_es']="Nodos: "+this.node_ids[0];
+			network_description['language_en']="Nodes: "+this.node_ids[0];
 
-		network_description=network_description+"\nHeuristicas: "+this.node_heuristics[0];
-		for (var i=1;i<this.node_heuristics.length;i++){
-			network_description=network_description+","+this.node_heuristics[i];
-		}
-
-		network_description=network_description+"\nAristas:\n";
-		for (var i=0;i<this.numEdges;i++){
-			if(this.edge_data[i][3]){ //Arista dirigida
-				network_description=network_description+" de "+this.edge_data[i][0]+" a "+this.edge_data[i][1]+" dirigida con coste "+this.edge_data[i][2]+"\n";
-			}else{ //Arista bidireccional
-				network_description=network_description+" de "+this.edge_data[i][0]+" a "+this.edge_data[i][1]+" bidireccional con coste "+this.edge_data[i][2]+"\n";
+			for (var i=1;i<this.node_ids.length;i++){
+				network_description['language_es']=network_description['language_es']+","+this.node_ids[i];
+				network_description['language_en']=network_description['language_en']+","+this.node_ids[i];
 			}
+
+			network_description['language_es']=network_description['language_es']+"\nHeuristicas: "+this.node_heuristics[0];
+			network_description['language_en']=network_description['language_en']+"\nHeuristics: "+this.node_heuristics[0];
+
+			for (var i=1;i<this.node_heuristics.length;i++){
+				network_description['language_es']=network_description['language_es']+","+this.node_heuristics[i];
+				network_description['language_en']=network_description['language_en']+","+this.node_heuristics[i];
+			}
+
+			network_description['language_es']=network_description['language_es']+"\nAristas:\n";
+			network_description['language_en']=network_description['language_en']+"\nEdges:\n";
+			
+			for (var i=0;i<this.numEdges;i++){
+				if(this.edge_data[i][3]){ //Arista dirigida
+					network_description['language_es']=network_description['language_es']+" de "+this.edge_data[i][0]+" a "+this.edge_data[i][1]+" dirigida con coste "+this.edge_data[i][2]+"\n";
+					network_description['language_en']=network_description['language_en']+" from "+this.edge_data[i][0]+" to "+this.edge_data[i][1]+" directed with cost "+this.edge_data[i][2]+"\n";
+					
+				}else{ //Arista bidireccional
+					network_description['language_es']=network_description['language_es']+" de "+this.edge_data[i][0]+" a "+this.edge_data[i][1]+" bidireccional con coste "+this.edge_data[i][2]+"\n";
+					network_description['language_en']=network_description['language_en']+" from "+this.edge_data[i][0]+" to "+this.edge_data[i][1]+" bidirectional with cost "+this.edge_data[i][2]+"\n";
+				}
+			}
+
+			network_description['language_es']=network_description['language_es']+"Nodo inicial: "+this.initial_node_id+".\n";
+			network_description['language_en']=network_description['language_en']+"Initial node: "+this.initial_node_id+".\n";
+
+			network_description['language_es']=network_description['language_es']+"Nodo(s) final(es): "+this.end_nodes_id+".\n";
+			network_description['language_en']=network_description['language_en']+"End node(s): "+this.end_nodes_id+".\n";
 		}
-
-		network_description=network_description+"Nodo inicial: "+this.initial_node_id+".\n";
-		network_description=network_description+"Nodo(s) final(es): "+this.end_nodes_id+".\n";
-
 		return network_description;
+		
 	}
 
 
@@ -439,7 +457,7 @@ class Grafo{
 
 			}
 	    }catch (err) {
-	        alert(err);
+	        //alert(err);
 	    }
 	    
 	}
@@ -511,7 +529,7 @@ class Grafo{
             }
         }
         catch (err) {
-            alert(err);
+            //alert(err);
         }
 
         return 1; //El codigo 1 me indica que todo se realizo correctamente
@@ -574,7 +592,7 @@ class Grafo{
 
 	        }
 	        catch (err) {
-	            alert(err);
+	            //alert(err);
 	        }
 	    }else{
 	    	return -1; //El código de error -1 me dice que la arista que se quiere actualizar no existe
@@ -609,7 +627,7 @@ class Grafo{
 			}
 		}
 		catch (err) {
-			alert(err);
+			//alert(err);
 		}
 	}
 
@@ -633,7 +651,7 @@ class Grafo{
 	    	}
 	    
 	    }catch (err) {
-	    	alert(err);
+	    	//alert(err);
 	    }
 	    return 1;
 	}
