@@ -25,7 +25,7 @@
 	"translate-import-button":"Import network",
 	"translate-resolution-header":"Network resolution",
 	"translate-resolution-actual-estate":"Networt current status",
-	"translate-resolution-info":"<span class=\"info_color_ini\">Red</span> nodes shows <span class=\"info_color_ini\">initial nodes</span>.<br><span class=\"info_color_fin\">Green</span> nodes shows <span class=\"info_color_fin\">end nodes</span>.",
+	"translate-resolution-info":"<span class=\"info_color_ini\">Red</span> nodes show <span class=\"info_color_ini\">initial nodes</span>.<br><span class=\"info_color_fin\">Green</span> nodes show <span class=\"info_color_fin\">end nodes</span>.",
 	"translate-resolution-option-deep-search":"Deep search",
 	"translate-resolution-option-wide-search":"Wide search",
 	"translate-resolution-option-iterative-descent":"Iterative descent",
@@ -50,5 +50,5 @@
 	"translate-network-data-header":"Network data",
 	"translate-network-rest-data":"Rest of data",
 	"translate-network-graphical-representation":"Network graphical representation",
-	"footer":"José Carlos Martínez Velázquez - End-of-degree project: Searching algorithm in artificial intelligence. University of Granada."
+	"footer":"José Carlos Martínez Velázquez - End-of-degree project: Searching algorithms in artificial intelligence. University of Granada."
 }

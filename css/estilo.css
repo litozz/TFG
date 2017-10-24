@@ -1,6 +1,6 @@
 
 body{
-    background:url('img/fondo.png');
+    background:url('../img/fondo.png');
 }
 
 .upper-menu{
@@ -106,6 +106,21 @@ body{
 .logo-col{
     padding: 0;
 }
+
+
+
+#import-network-input{
+    color:transparent;
+}
+
+
+
+
+
+
+
+
+
 /*FROM HERE DOESNT HAVE CONSCIENCE OF BOOTSTRAP*/
 
 

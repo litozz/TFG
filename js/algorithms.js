@@ -2,9 +2,9 @@
 class Algorithms{
 
 	constructor(){
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 	}
 
 
@@ -349,13 +349,13 @@ class Algorithms{
 
 
 
-
+	//Translated
 	deepSearch(network_nodes,network_edges,initial_node_id,end_nodes_id,iter_bound){
 		var contador_pasos=0;
 
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 
 		//OBTENCION DE ID DE NODOS Y VALOR HEURISTICO
 		var node_data = network_nodes.get({
@@ -409,37 +409,50 @@ class Algorithms{
 
 		var tupla_actual=[null,nodo_inicial];
 		abiertos.push(tupla_actual);
-		var explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.";////////////////
+		var explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.";////////////////
+		var explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.";////////////////
 		
 
 
 		contador_pasos+=1;
-		explicacion="Paso "+contador_pasos+":\n"+explicacion;
-		this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+		
+		explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;////////////////
+		explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;////////////////
+		
+		this.string_descriptions_steps['language_es'].push(explicacion_es);//Including explaining at resolution (spa)
+		this.string_descriptions_steps['language_en'].push(explicacion_en);//Including explaining at resolution (eng)
+		
 		this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-		this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+		this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+		this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 		
 		var bound_cont=0;
 
-		explicacion="\n"+explicacion;
+		explicacion_es="\n"+explicacion_es;
+		explicacion_en="\n"+explicacion_en;
 
 
 		while(this.isEndNodeInClosed(nodos_finales,cerrados)==-1 && abiertos.length>0){
 			if(this.isNodeInList(tupla_actual[1],cerrados)==-1){ //Si el nodo que vamos a abrir no está en cerrados, esto es, no ha sido ya visitado, procedemos a meterlo
 				
-				explicacion="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion;////////////////
+				explicacion_es="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion_es;////////////////
+				explicacion_en="Delete "+this.getTupleAsString(node_ids,tupla_actual)+" from opened nodes list.\n"+explicacion_en;////////////////
 				
 				abiertos.splice(abiertos.indexOf(tupla_actual), 1);
 				
-				explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados.\n"+explicacion;////////////////
+				explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados.\n"+explicacion_es;////////////////
+				explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.\n"+explicacion_en;////////////////
 
 				cerrados.push(tupla_actual);
 				
 
 				hijos=this.getAllSonNodes(adjMatrix,tupla_actual[1]);
 				var nhijos=hijos.length
-				if(nhijos>0)
-					explicacion="\n"+explicacion;
+				if(nhijos>0){
+					explicacion_es="\n"+explicacion_es;////////////////
+					explicacion_en="\n"+explicacion_en;////////////////
+				}
 
 				var posicion_insert=0;
 				var tupla_insert;
@@ -447,56 +460,86 @@ class Algorithms{
 					//DETECCION DE CICLOS EN EL GRAFO
 					tupla_insert=[ tupla_actual[1],hijos[i] ]
 					if(this.isNodeInList(tupla_insert[1],abiertos)==-1 && this.isNodeInList(tupla_insert[1],cerrados)==-1){
-						explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion;////////////////
+						explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion_es;////////////////
+						explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_insert)+" into opened nodes list.\n"+explicacion_en;////////////////
+
 						abiertos.splice(posicion_insert, 0, tupla_insert);//Inserto los hijos desde la primera posicion (en orden) en la lista de abiertos.
 						posicion_insert+=1;
 						
 						//this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
 						//this.network_steps.push(this.network_steps[this.network_steps.length-1]);
-						//this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+						//this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
 					}else{
-						explicacion="NO Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos porque ya esta abierto, cerrado o ya ha sido visitado.\n"+explicacion;////////////////
+						explicacion_es="NO inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos porque ya esta abierto, cerrado o ya ha sido visitado.\n"+explicacion_es;////////////////
+						explicacion_en="DON'T insert "+this.getTupleAsString(node_ids,tupla_insert)+" into opened nodes list because it was already opened, closed or have been already visited.\n"+explicacion_en;////////////////
 					}
 				}
 				
 				contador_pasos+=1;
-				explicacion="Paso "+contador_pasos+":\n"+explicacion;
-				this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
-				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-				this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
 
-				explicacion="\n"+explicacion;
+				explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;////////////////
+				explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;////////////////
+				
+				this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+				this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
+				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
+
+				this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
+
+				explicacion_es="\n"+explicacion_es;////////////////
+				explicacion_en="\n"+explicacion_en;////////////////
 
 				if(this.isInList(tupla_actual[1],nodos_finales)==-1){//Si el nodo de la tupla actual (nodo hijo de la tupla actual) NO es un nodo final lo meto en abiertos, si no, termino.
 					
 					if(abiertos.length>0){
 						tupla_actual=abiertos[0];
-						explicacion="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual.\n"+explicacion;////////////////
+						explicacion_es="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual.\n"+explicacion_es;////////////////
+						explicacion_en="Assign "+this.getTupleAsString(node_ids,tupla_actual)+" as current tuple.\n"+explicacion_en;////////////////
 					}
 				}else{
-					explicacion="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion;////////////////
+					explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion_es;////////////////
+					explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" is end node, algorithm finishes.\n"+explicacion_en;////////////////
 
 					contador_pasos+=1;
-					explicacion="Paso "+contador_pasos+":\n"+explicacion;
-					this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+					explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+					explicacion_en="Paso "+contador_pasos+":\n"+explicacion_en;
+
+					this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+					this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 					this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-					this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+					
+					this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+					this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 
 
 				}
 				
 
-				explicacion="\n"+explicacion;////////////////
+				explicacion_es="\n"+explicacion_es;////////////////
+				explicacion_en="\n"+explicacion_en;////////////////
 				
 			}else{//Si el nodo que ibamos a meter en abiertos estaba previamente en cerrados, debemos romper el bucle, pues hemos detectado un ciclo.
-				explicacion="Se vuelve a visitar el nodo "+this.getNodeId(node_ids,tupla_actual[1])+" y se produce un ciclo infinito.\n"+explicacion;
+				explicacion_es="Se vuelve a visitar el nodo "+this.getNodeId(node_ids,tupla_actual[1])+" y se produce un ciclo infinito.\n"+explicacion_es;
+				explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" is visited again and an infinite loop will be generated.\n"+explicacion_en;
 				
 
 				contador_pasos+=1;
-				explicacion="Paso "+contador_pasos+":\n"+explicacion;
-				this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+				
+				explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+				explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+				
+				this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+				this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-				this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				
+				this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
+
 				break;
 			}
 
@@ -560,11 +603,14 @@ class Algorithms{
 			//FIN OBTENCION DEL CAMINO POR NOMBRES
 			
 
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
 		}else{
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Failed finding a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
 		}
 
+		
 		return {descriptions: this.string_descriptions_steps, steps: this.network_steps, lists: this.open_closed_steps};
 	}
 
@@ -625,13 +671,13 @@ class Algorithms{
 
 
 
-
+	//Translated
 	iterativeDescent(network_nodes,network_edges,initial_node_id,end_nodes_id,prof_bound,iter_bound){
 		var contador_pasos=0;
 
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 
 		//OBTENCION DE ID DE NODOS Y VALOR HEURISTICO
 		var node_data = network_nodes.get({
@@ -685,7 +731,8 @@ class Algorithms{
 		var coste=0;
 		var tupla_actual;
 		var inf_cycle=false;
-		var explicacion="";
+		var explicacion_es="";////////////////
+		var explicacion_en="";////////////////
 
 		
 
@@ -698,25 +745,36 @@ class Algorithms{
 
 			tupla_actual=[null,nodo_inicial,0];
 			abiertos.push(tupla_actual);
-			explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.\n\n"+explicacion;////////////////
+			explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.\n\n"+explicacion_es;////////////////
+			explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.\n\n"+explicacion_en;////////////////
 			
 			contador_pasos+=1;
-			explicacion="Paso "+contador_pasos+":\n"+explicacion;
-			this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
-			this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-			this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+			
+			explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+			explicacion_en="Paso "+contador_pasos+":\n"+explicacion_en;
 
-			explicacion="\n"+explicacion;
+			this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+			this.string_descriptions_steps['language_en'].push(explicacion_es);//Incluir explicaciones en la resolucion
+
+			this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
+			
+			this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+			this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
+
+			explicacion_es="\n"+explicacion_es;
+			explicacion_en="\n"+explicacion_en;
 
 			while(this.isEndNodeInClosed(nodos_finales,cerrados)==-1 && abiertos.length>0 && !inf_cycle){
 				
 				if(this.isTupleInList(tupla_actual,cerrados)==-1){ //Si el nodo que vamos a abrir no está en cerrados, esto es, no ha sido ya visitado, procedemos a meterlo
 					
-					explicacion="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion;////////////////
+					explicacion_es="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion_es;////////////////
+					explicacion_en="Delete "+this.getTupleAsString(node_ids,tupla_actual)+" from opened nodes list.\n"+explicacion_en;////////////////
 					
 					abiertos.splice(abiertos.indexOf(tupla_actual), 1);
 					
-					explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados.\n"+explicacion;////////////////
+					explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados.\n"+explicacion_es;////////////////
+					explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.\n"+explicacion_en;////////////////
 
 					cerrados.push(tupla_actual);
 					
@@ -724,18 +782,23 @@ class Algorithms{
 					if(tupla_actual[2]<max_prof){//Si aun no he alcanzado la profundidad actual, meto todos los hijos
 						hijos=this.getAllSonNodes(adjMatrix,tupla_actual[1]);
 						if(hijos.length>0){
-							explicacion="\n"+explicacion;
+							explicacion_es="\n"+explicacion_es;
+							explicacion_en="\n"+explicacion_en;
 							var posicion_insert=0;
 							var tupla_insert;
 							for(var i=0;i<hijos.length;i++){
 								//DETECCION DE CICLOS EN EL GRAFO
 								tupla_insert=[ tupla_actual[1],hijos[i],tupla_actual[2]+1 ]
 								if(!abiertos.includes(tupla_insert) && !cerrados.includes(tupla_insert)){ //Si no esta en abiertos ni en cerrados		
-									explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion;////////////////
+									
+									explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion_es;////////////////
+									explicacion_en="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" into opened nodes list.\n"+explicacion_en;////////////////
+									
 									abiertos.splice(posicion_insert, 0, tupla_insert);//Inserto los hijos desde la primera posicion (en orden) en la lista de abiertos.
 									posicion_insert+=1;
 								}else{
-									explicacion="NO Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos porque ya esta abierto o ya ha sido visitado.\n"+explicacion;////////////////
+									explicacion_es="NO Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos porque ya esta abierto o ya ha sido visitado.\n"+explicacion_es;////////////////
+									explicacion_en="DON'T insert "+this.getTupleAsString(node_ids,tupla_insert)+" into opened nodes list because it was already opened, closed or have been already visited.\n"+explicacion_en;////////////////
 								}
 							}
 							
@@ -743,41 +806,72 @@ class Algorithms{
 					}
 
 					contador_pasos+=1;
-					explicacion="Paso "+contador_pasos+":\n"+explicacion;
-					this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
-					this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-					this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
 					
-					explicacion="\n"+explicacion;
+					explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+					explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+					
+
+					this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+					this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+					
+					this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
+					
+					this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+					this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
+
+					
+					explicacion_es="\n"+explicacion_es;
+					explicacion_en="\n"+explicacion_en;
+
 
 					if(this.isInList(tupla_actual[1],nodos_finales)==-1){//Si el nodo de la tupla actual (nodo hijo de la tupla actual) NO es un nodo final lo meto en abiertos, si no, termino.
 						if(abiertos.length>0){
 							tupla_actual=abiertos[0];
-							explicacion="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual.\n"+explicacion;////////////////
+							explicacion_es="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual.\n"+explicacion_es;////////////////
+							explicacion_en="Assign "+this.getTupleAsString(node_ids,tupla_actual)+" as current tuple.\n"+explicacion_en;////////////////
 						}
 					}else{
-						explicacion="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion;////////////////
+						explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion_es;////////////////
+						explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" is end node, algorithm finishes.\n"+explicacion_en;////////////////
+						
 
 						contador_pasos+=1;
-						explicacion="Paso "+contador_pasos+":\n"+explicacion;
-						this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+						explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+						explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+						this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+						this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 						this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-						this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+						this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+						this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 
 
 					}
 					
 
-					explicacion="\n"+explicacion;////////////////
+					explicacion_es="\n"+explicacion_es;
+					explicacion_en="\n"+explicacion_en;
 					
 				}else{//Si el nodo que ibamos a meter en abiertos estaba previamente en cerrados, debemos romper el bucle, pues hemos detectado un ciclo.
-					explicacion="Se vuelve a visitar el nodo "+this.getNodeId(node_ids,tupla_actual[1])+" (la tupla "+this.getTupleAsString(node_ids,tupla_actual)+" está en cerrados). Lo ignoramos y pasamos al siguiente.\n"+explicacion;
+					explicacion_es="Se vuelve a visitar el nodo "+this.getNodeId(node_ids,tupla_actual[1])+" (la tupla "+this.getTupleAsString(node_ids,tupla_actual)+" está en cerrados). Lo ignoramos y pasamos al siguiente.\n"+explicacion_es;
+					explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" is visited again (tuple "+this.getTupleAsString(node_ids,tupla_actual)+" is in closed nodes list). This node is ignored and move on to the next one.\n"+explicacion_en;
 
 					contador_pasos+=1;
-					explicacion="Paso "+contador_pasos+":\n"+explicacion;
-					this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+					explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+					explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+					this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+					this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 					this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-					this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+					this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+					this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 
 					abiertos.splice(abiertos.indexOf(tupla_actual), 1);
 					tupla_actual=abiertos[0];
@@ -786,9 +880,14 @@ class Algorithms{
 
 			if(!nodos_finales.includes(tupla_actual[1]) && !inf_cycle){
 				max_prof+=1;
-				explicacion="------------------------------------------------------------\n"+explicacion;////////////////
-				explicacion="No se ha encontrado un nodo final.\nSe aumenta la profundidad maxima a explorar, ahora vale: "+max_prof+". Reinicializamos el contador de profundidad y volvemos a comenzar.\n"+explicacion;////////////////
-				explicacion="------------------------------------------------------------\n"+explicacion;////////////////
+				explicacion_es="------------------------------------------------------------\n"+explicacion_es;////////////////
+				explicacion_en="------------------------------------------------------------\n"+explicacion_en;////////////////
+				
+				explicacion_es="No se ha encontrado un nodo final.\nSe aumenta la profundidad maxima a explorar, ahora vale: "+max_prof+". Reinicializamos el contador de profundidad y volvemos a comenzar.\n"+explicacion_es;////////////////
+				explicacion_en="Failed finding an end node.\nMaximum depth to explore is incremented. Maximum depth current value: "+max_prof+". Reset depth counter and restart algorithm.\n"+explicacion_en;////////////////
+				
+				explicacion_es="------------------------------------------------------------\n"+explicacion_es;////////////////
+				explicacion_en="------------------------------------------------------------\n"+explicacion_en;////////////////
 			}else{//Cuando en una iteracion he alcanzado nodo final, debo salir del bucle
 				break;
 			}
@@ -861,9 +960,16 @@ class Algorithms{
 			//FIN OBTENCION DEL CAMINO POR NOMBRES
 			
 
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			/*
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];*/
+
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
+
 		}else{
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Failed finding a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
 		}
 		return {descriptions: this.string_descriptions_steps, steps: this.network_steps, lists: this.open_closed_steps};
 	}
@@ -954,13 +1060,13 @@ class Algorithms{
 
 
 
-
+	//Translated
 	astar(network_nodes,network_edges,initial_node_id,end_nodes_id,iter_bound){
 		var contador_pasos=0;
 
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 
 		//OBTENCION DE ID DE NODOS Y VALOR HEURISTICO
 		var node_data = network_nodes.get({
@@ -1015,46 +1121,73 @@ class Algorithms{
 		var g_component_actual=0;
 		var tupla_actual=[ null,nodo_inicial,g_component_actual,node_heuristics[nodo_inicial] ]; //(padre,hijo,g,h)
 		abiertos.push(tupla_actual);
-		var explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.";////////////////
+		
+		var explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.";////////////////
+		var explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.";////////////////
 		
 		contador_pasos+=1;
-		explicacion="Paso "+contador_pasos+":\n"+explicacion;
-		this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+		explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+		explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+		this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+		this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 		this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-		this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+		this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+		this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 		
-		explicacion="\n"+explicacion;
+		explicacion_es="\n"+explicacion_es;
+		explicacion_en="\n"+explicacion_en;
 
 		var bound_cont=0;
 
 
 		while(this.isEndNodeInClosed(nodos_finales,cerrados)==-1 && abiertos.length>0){
 			if(this.isNodeInList(tupla_actual[1],cerrados)==-1){	
-				explicacion="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion;////////////////
+				explicacion_es="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion_es;////////////////
+				explicacion_en="Delete "+this.getTupleAsString(node_ids,tupla_actual)+" from opened nodes list.\n"+explicacion_en;////////////////
+
 				
 				abiertos.splice(abiertos.indexOf(tupla_actual), 1);
 
 
 				var index_in_closed=this.isNodeInList(tupla_actual[1],cerrados);
 				if(index_in_closed==-1){//El nodo actual no esta en la lista de cerrados
-					explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados (actualizando los posibles cambios producidos por propagaciones).\n"+explicacion;////////////////
+					explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados (actualizando los posibles cambios producidos por propagaciones).\n"+explicacion_es;////////////////
+					explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into closed nodes list (updating possible changes triggered by propagation).\n"+explicacion_en;////////////////
+
 					cerrados.push(tupla_actual);
 					
 					//COMENTAR ESTO SI FALLA EL ALGORITMO EN ALGUN CASO CON LAS PROPAGACIONES
 					cerrados=this.update_costs(tupla_actual,cerrados,adjMatrix).slice(0);
 				}else{//Si esta, tengo que ver si actualizo el camino porque es mejor o se queda el que estaba
 					if(cerrados[index_in_closed][2]>tupla_actual[2]){
-						explicacion="[ACTUALIZACION EN CERRADOS] El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" ya estaba cerrado, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_actual[0])+". Cambio "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" por "+this.getTupleAsString(node_ids,tupla_actual)+". Propago la actualización.\n\n"+explicacion;////////////////
+						
+						explicacion_es="[ACTUALIZACION EN CERRADOS] El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" ya estaba cerrado, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_actual[0])+". Cambio "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" por "+this.getTupleAsString(node_ids,tupla_actual)+". Propago la actualización.\n\n"+explicacion_es;////////////////
+						explicacion_en="[UPDATE IN CLOSED NODES LIST] Node "+this.getNodeId(node_ids,tupla_actual[1])+" it was already closed, but a better path was found to it going through "+this.getNodeId(node_ids,tupla_actual[0])+". Change "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" by "+this.getTupleAsString(node_ids,tupla_actual)+". Propagate update.\n\n"+explicacion_en;////////////////
+						
+
 						cerrados[index_in_closed]=tupla_actual;
 						//COMENTAR ESTO SI FALLA EL ALGORITMO EN ALGUN CASO CON LAS PROPAGACIONES
 						cerrados=this.propagate_changes(tupla_actual,cerrados,adjMatrix).slice(0);
 					}else if(abiertos.length==0){
-						explicacion=explicacion+"La lista de cerrados no cambia (por lo que el nodo que iba a cerrados era peor que el nuevo o ya estaba visitado) y la lista de nodos abiertos esta vacia (en la siguiente iteracion no podemos abrir nodos que mejoren lo que ya habiamos abierto previamente), se ha detectado que se va a producir un ciclo infinito si insertamos el(los) hijo(s) de "+this.getNodeId(node_ids,tupla_actual[1])+".\n\n"+explicacion;////////////////
+						explicacion_es=explicacion_es+"La lista de cerrados no cambia (por lo que el nodo que iba a cerrados era peor que el nuevo o ya estaba visitado) y la lista de nodos abiertos esta vacia (en la siguiente iteracion no podemos abrir nodos que mejoren lo que ya habiamos abierto previamente), se ha detectado que se va a producir un ciclo infinito si insertamos el(los) hijo(s) de "+this.getNodeId(node_ids,tupla_actual[1])+".\n\n"+explicacion_es;////////////////
+						explicacion_en=explicacion_en+"Closed nodes list doesn't change (for this reason, the node going to closed list was worse than the new one or the one was already visited) and open nodes list is empty ( in the next iteration is not possible to open any node that improve the nodes previously opened), it was detected that an infinite cycle is going to occur if son(s) node(s) of "+this.getNodeId(node_ids,tupla_actual[1])+" is/are inserted.\n\n"+explicacion_en;////////////////
+
 						contador_pasos+=1;
-						explicacion="Paso "+contador_pasos+":\n"+explicacion;
-						this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+						explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+						explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+						this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+						this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 						this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-						this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+						this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+						this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 						
 						break;
 					}	
@@ -1065,7 +1198,8 @@ class Algorithms{
 				var nhijos=hijos.length;
 
 				if(nhijos>0){
-					explicacion="\n"+explicacion;////////////////
+					explicacion_es="\n"+explicacion_es;
+					explicacion_en="\n"+explicacion_en;////////////////
 				}
 
 				//Inserto los hijos
@@ -1083,24 +1217,35 @@ class Algorithms{
 					index_in_closed=this.isNodeInList(tupla_insert[1],cerrados);
 
 					if(index_in_open==-1 && index_in_closed==-1){//El nodo actual no esta en la lista de abiertos ni en cerrados
-						explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion;////////////////
+						explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion_es;////////////////
+						explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_insert)+" into opened nodes list.\n"+explicacion_en;////////////////
+						
+						
 						abiertos.push(tupla_insert);//Inserto los hijos desde la primera posicion (en orden) en la lista de abiertos.
 					}else if(index_in_open!=-1){//Actualizo el nodo en abiertos para que solo este el mejor camino a ese nodo
 						if(abiertos[index_in_open][2]>tupla_insert[2]){
-							explicacion="[ACTUALIZACION EN ABIERTOS] El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba abierto, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_insert[0])+". Cambio "+this.getTupleAsString(node_ids,abiertos[index_in_open])+" por "+this.getTupleAsString(node_ids,tupla_insert)+".\n"+explicacion;////////////////
+							explicacion_es="[ACTUALIZACION EN ABIERTOS] El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba abierto, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_insert[0])+". Cambio "+this.getTupleAsString(node_ids,abiertos[index_in_open])+" por "+this.getTupleAsString(node_ids,tupla_insert)+".\n"+explicacion_es;////////////////
+							explicacion_en="[UPDATE IN OPENED NODES LIST] Node "+this.getNodeId(node_ids,tupla_insert[1])+" was already opened, but a better path was found to it going through "+this.getNodeId(node_ids,tupla_insert[0])+". Change "+this.getTupleAsString(node_ids,abiertos[index_in_open])+" by "+this.getTupleAsString(node_ids,tupla_insert)+".\n"+explicacion_en;////////////////
+
 							abiertos[index_in_open]=tupla_insert;
 						}else{
-							explicacion="El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba abierto, pero aunque he encontrado un camino alternativo (pasando por "+this.getNodeId(node_ids,tupla_insert[0])+"), no mejora el coste del camino actual. Me quedo con el que tenia.\n"+explicacion;////////////////
+							explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba abierto, pero aunque he encontrado un camino alternativo (pasando por "+this.getNodeId(node_ids,tupla_insert[0])+"), no mejora el coste del camino actual. Me quedo con el que tenia.\n"+explicacion_es;////////////////
+							explicacion_en="Node "+this.getNodeId(node_ids,tupla_insert[1])+" was already opened, but although an alternative path was found (going through "+this.getNodeId(node_ids,tupla_insert[0])+"), doesn't improve current path cost. Keep the current path.\n"+explicacion_en;////////////////
+
 						}
 					}else if(index_in_closed!=-1){//Actualizo el nodo en abiertos para que solo este el mejor camino a ese nodo
 						if(cerrados[index_in_closed][2]>tupla_insert[2]){
-							explicacion="[ACTUALIZACION EN CERRADOS] El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba cerrado, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_insert[0])+". Cambio "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" por "+this.getTupleAsString(node_ids,tupla_insert)+". Propago la actualización.\n"+explicacion;////////////////
+							explicacion_es="[ACTUALIZACION EN CERRADOS] El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba cerrado, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_insert[0])+". Cambio "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" por "+this.getTupleAsString(node_ids,tupla_insert)+". Propago la actualización.\n"+explicacion_es;////////////////
+							explicacion_en="[UPDATE IN CLOSED NODES LIST] Node "+this.getNodeId(node_ids,tupla_insert[1])+" was already closed, but a better path was found to it going through  "+this.getNodeId(node_ids,tupla_insert[0])+". Change "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" by "+this.getTupleAsString(node_ids,tupla_insert)+". Propagate update.\n"+explicacion_en;////////////////
+
 							cerrados[index_in_closed]=tupla_insert;
 							//COMENTAR ESTO SI FALLA EL ALGORITMO EN ALGUN CASO CON LAS PROPAGACIONES
 							cerrados=this.propagate_changes(tupla_insert,cerrados,adjMatrix).slice(0);
 
 						}else{
-							explicacion="El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba cerrado, pero aunque he encontrado un camino alternativo (pasando por "+this.getNodeId(node_ids,tupla_insert[0])+"), no mejora el coste del camino actual. Me quedo con el que tenia.\n"+explicacion;////////////////
+							explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba cerrado, pero aunque he encontrado un camino alternativo (pasando por "+this.getNodeId(node_ids,tupla_insert[0])+"), no mejora el coste del camino actual. Me quedo con el que tenia.\n"+explicacion_es;////////////////
+							explicacion_en="Node "+this.getNodeId(node_ids,tupla_insert[1])+" was already closed, but although an alternative path was found (going through "+this.getNodeId(node_ids,tupla_insert[0])+"), doesn't improve current path cost. Keep the current path.\n"+explicacion_en;////////////////
+
 						}
 					}
 
@@ -1112,10 +1257,16 @@ class Algorithms{
 				abiertos.sort(function(x, y){return x[1] > y[1];}); //ORDENO POR ORDEN LEXICOGRAFICO PARA CRITERIO DE DESEMPATE
 			
 				contador_pasos+=1;
-				explicacion="Paso "+contador_pasos+":\n"+explicacion;
-				this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+				explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+				explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+				this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+				this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-				this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+				this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 
 				if(this.isInList(tupla_actual[1],nodos_finales)==-1){//Si el nodo de la tupla actual (nodo hijo de la tupla actual) NO es un nodo final lo meto en abiertos, si no, termino.
 					if(abiertos.length>0){
@@ -1126,27 +1277,44 @@ class Algorithms{
 							}
 						}
 						g_component_actual=tupla_actual[2];
-						explicacion="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual, por tener la menor funcion heuristica (o por criterio de desempate: orden lexicografico)\n\n"+explicacion;////////////////
+						explicacion_es="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual, por tener la menor funcion heuristica (o por criterio de desempate: orden lexicografico)\n\n"+explicacion_es;////////////////
+						explicacion_en="Assign "+this.getTupleAsString(node_ids,tupla_actual)+" as current tuple, because it has the smaller heuristic function (or tie-break criterion: lexicographic order)\n\n"+explicacion_en;////////////////
+
 					}
 				}else{
-					explicacion="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion;////////////////
+					explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion_es;////////////////
+					explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" is end node, algorithm finishes.\n"+explicacion_en;////////////////
 					
 					contador_pasos+=1;
-					explicacion="Paso "+contador_pasos+":\n"+explicacion;
-					this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+					explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+					explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+					this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+					this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 					this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-					this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+					this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+					this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 				}
 			
-				explicacion="\n"+explicacion;////////////////
+				explicacion_es="\n"+explicacion_es;
+				explicacion_en="\n"+explicacion_en;////////////////
 				
 			
 			}else{//Si el nodo que ibamos a meter en abiertos estaba previamente en cerrados, debemos romper el bucle, pues hemos detectado un ciclo.
 				contador_pasos+=1;
-				explicacion="Paso "+contador_pasos+":\n"+explicacion;
-				this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+				explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+				explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+				this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+				this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-				this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+				this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 				
 
 
@@ -1212,9 +1380,12 @@ class Algorithms{
 			//FIN OBTENCION DEL CAMINO POR NOMBRES
 			
 
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
+
 		}else{
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Failed finding a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
 		}
 		return {descriptions: this.string_descriptions_steps, steps: this.network_steps, lists: this.open_closed_steps};
 	}
@@ -1280,9 +1451,9 @@ class Algorithms{
 	wideSearch(network_nodes,network_edges,initial_node_id,end_nodes_id,iter_bound){
 		var contador_pasos=0;
 
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 
 		//OBTENCION DE ID DE NODOS Y VALOR HEURISTICO
 		var node_data = network_nodes.get({
@@ -1336,36 +1507,51 @@ class Algorithms{
 
 		var tupla_actual=[null,nodo_inicial];
 		abiertos.push(tupla_actual);
-		var explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.";////////////////
+		var explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.";////////////////
+		var explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.";////////////////
 		
 		contador_pasos+=1;
-		explicacion="Paso "+contador_pasos+":\n"+explicacion;
-		this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+		explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+		explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+		this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+		this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 		this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-		this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+		this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+		this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 		
 		var bound_cont=0;
 
-		explicacion="\n"+explicacion;
+		explicacion_es="\n"+explicacion_es;
+		explicacion_en="\n"+explicacion_en;
 
 
 		while(this.isEndNodeInClosed(nodos_finales,cerrados)==-1 && abiertos.length>0){
 			
 			if(this.isNodeInList(tupla_actual[1],cerrados)==-1){ //Si el nodo que vamos a abrir no está en cerrados, esto es, no ha sido ya visitado, procedemos a meterlo
 				
-				explicacion="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion;////////////////
+				explicacion_es="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion_es;////////////////
+				explicacion_en="Delete "+this.getTupleAsString(node_ids,tupla_actual)+" from opened nodes list.\n"+explicacion_en;////////////////
 				
 				abiertos.splice(abiertos.indexOf(tupla_actual), 1);
 				
-				explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados.\n"+explicacion;////////////////
+				explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados.\n"+explicacion_es;////////////////
+				explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into closed nodes list.\n"+explicacion_en;////////////////
+
 
 				cerrados.push(tupla_actual);
 				
 
 				hijos=this.getAllSonNodes(adjMatrix,tupla_actual[1]);
 				var nhijos=hijos.length
-				if(nhijos>0)
-					explicacion="\n"+explicacion;
+				if(nhijos>0){
+					explicacion_es="\n"+explicacion_es;
+					explicacion_en="\n"+explicacion_en;
+				}
+				
 
 				var posicion_insert=0;
 				var tupla_insert;
@@ -1373,51 +1559,79 @@ class Algorithms{
 					//DETECCION DE CICLOS EN EL GRAFO
 					tupla_insert=[ tupla_actual[1],hijos[i] ]
 					if(this.isNodeInList(tupla_insert[1],abiertos)==-1 && this.isNodeInList(tupla_insert[1],cerrados)==-1){
-						explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion;////////////////
+						explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion_es;////////////////
+						explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_insert)+" into opened nodes list.\n"+explicacion_en;////////////////
 						abiertos.push(tupla_insert);
 						posicion_insert+=1;			
 					}else{
-						explicacion="NO Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos porque ya esta abierto, cerrado o ya ha sido visitado.\n"+explicacion;////////////////
+						explicacion_es="NO Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos porque ya esta abierto, cerrado o ya ha sido visitado.\n"+explicacion_es;////////////////
+						explicacion_en="DON'T insert "+this.getTupleAsString(node_ids,tupla_insert)+" into opened nodes list because it was already opened, closed or have been already visited.\n"+explicacion_en;////////////////
 					}
 				}
 				
 				contador_pasos+=1;
-				explicacion="Paso "+contador_pasos+":\n"+explicacion;
-				this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
-				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-				this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
 
-				explicacion="\n"+explicacion;
+				explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+				explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+				this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+				this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
+				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
+
+				this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
+
+				explicacion_es="\n"+explicacion_es;
+				explicacion_en="\n"+explicacion_en;
 
 				if(this.isInList(tupla_actual[1],nodos_finales)==-1){//Si el nodo de la tupla actual (nodo hijo de la tupla actual) NO es un nodo final lo meto en abiertos, si no, termino.
 					
 					if(abiertos.length>0){
 						tupla_actual=abiertos[0];
-						explicacion="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual.\n"+explicacion;////////////////
+						explicacion_es="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual.\n"+explicacion_es;////////////////
+						explicacion_en="Assign "+this.getTupleAsString(node_ids,tupla_actual)+" as current tuple.\n"+explicacion_en;////////////////
 					}
 				}else{
-					explicacion="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion;////////////////
+					explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion_es;////////////////
+					explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" is end node, algorithm finishes.\n"+explicacion_en;////////////////
 
 					contador_pasos+=1;
-					explicacion="Paso "+contador_pasos+":\n"+explicacion;
-					this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+					explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+					explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+					this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+					this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 					this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-					this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+					this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+					this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 
 
 				}
 				
 
-				explicacion="\n"+explicacion;////////////////
+				explicacion_es="\n"+explicacion_es;////////////////
+				explicacion_en="\n"+explicacion_en;////////////////
 				
 			}else{//Si el nodo que ibamos a meter en abiertos estaba previamente en cerrados, debemos romper el bucle, pues hemos detectado un ciclo.
-				explicacion="Se vuelve a visitar el nodo "+this.getNodeId(node_ids,tupla_actual[1])+" y se produce un ciclo infinito.\n"+explicacion;
+				explicacion_es="Se vuelve a visitar el nodo "+this.getNodeId(node_ids,tupla_actual[1])+" y se produce un ciclo infinito.\n"+explicacion_es;
+				explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" is visited again and an infinite loop will be generated.\n"+explicacion_en;
 				
 				contador_pasos+=1;
-				explicacion="Paso "+contador_pasos+":\n"+explicacion;
-				this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+				explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+				explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+				this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+				this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-				this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+				this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
+				
 				break;
 			}
 
@@ -1482,9 +1696,12 @@ class Algorithms{
 			//FIN OBTENCION DEL CAMINO POR NOMBRES
 			
 
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
+
 		}else{
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Failed finding a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
 		}
 
 		return {descriptions: this.string_descriptions_steps, steps: this.network_steps, lists: this.open_closed_steps};
@@ -1553,9 +1770,9 @@ class Algorithms{
 	uniformCost(network_nodes,network_edges,initial_node_id,end_nodes_id,iter_bound){
 		var contador_pasos=0;
 
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 
 		//OBTENCION DE ID DE NODOS Y VALOR HEURISTICO
 		var node_data = network_nodes.get({
@@ -1610,45 +1827,66 @@ class Algorithms{
 		var g_component_actual=0;
 		var tupla_actual=[ null,nodo_inicial,g_component_actual]; //(padre,hijo,g,h)
 		abiertos.push(tupla_actual);
-		var explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.";////////////////
+		var explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de abiertos.";////////////////
+		var explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.";////////////////
 		
 		contador_pasos+=1;
-		explicacion="Paso "+contador_pasos+":\n"+explicacion;
-		this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+		explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+		explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+		this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+		this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 		this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-		this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+		this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+		this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 		
-		explicacion="\n"+explicacion;
+		explicacion_es="\n"+explicacion_es;
+		explicacion_en="\n"+explicacion_en;
 
 		var bound_cont=0;
 
 
 		while(this.isEndNodeInClosed(nodos_finales,cerrados)==-1 && abiertos.length>0){
 			if(this.isNodeInList(tupla_actual[1],cerrados)==-1){	
-				explicacion="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion;////////////////
+				explicacion_es="Elimino "+this.getTupleAsString(node_ids,tupla_actual)+" de la lista de abiertos.\n"+explicacion_es;////////////////
+				explicacion_en="Delete "+this.getTupleAsString(node_ids,tupla_actual)+" from opened nodes list.\n"+explicacion_en;////////////////
 				
 				abiertos.splice(abiertos.indexOf(tupla_actual), 1);
 
 
 				var index_in_closed=this.isNodeInList(tupla_actual[1],cerrados);
 				if(index_in_closed==-1){//El nodo actual no esta en la lista de cerrados
-					explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados (actualizando los posibles cambios producidos por propagaciones).\n"+explicacion;////////////////
+					explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados (actualizando los posibles cambios producidos por propagaciones).\n"+explicacion_es;////////////////
+					explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into closed nodes list (updating possible changes triggered by propagation).\n"+explicacion_en;////////////////
+
 					cerrados.push(tupla_actual);
 					//COMENTAR ESTO SI FALLA EN ALGUN CASO EL ALGORITMO CON LAS PROPAGACIONES
 					cerrados=this.update_costs(tupla_actual,cerrados,adjMatrix).slice(0);
 				}else{//Si esta, tengo que ver si actualizo el camino porque es mejor o se queda el que estaba
 					if(cerrados[index_in_closed][2]>tupla_actual[2]){
-						explicacion="[ACTUALIZACION EN CERRADOS] El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" ya estaba cerrado, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_actual[0])+". Cambio "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" por "+this.getTupleAsString(node_ids,tupla_actual)+". Propago la actualización.\n\n"+explicacion;////////////////
+						explicacion_es="[ACTUALIZACION EN CERRADOS] El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" ya estaba cerrado, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_actual[0])+". Cambio "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" por "+this.getTupleAsString(node_ids,tupla_actual)+". Propago la actualización.\n\n"+explicacion_es;////////////////
+						explicacion_en="[UPDATE IN CLOSED NODES LIST] Node "+this.getNodeId(node_ids,tupla_actual[1])+" it was already closed, but a better path was found to it going through "+this.getNodeId(node_ids,tupla_actual[0])+". Change "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" by "+this.getTupleAsString(node_ids,tupla_actual)+". Propagate update.\n\n"+explicacion_en;////////////////
+						
 						cerrados[index_in_closed]=tupla_actual;
 						//COMENTAR ESTO SI FALLA EN ALGUN CASO EL ALGORITMO CON LAS PROPAGACIONES
 						cerrados=this.propagate_changes(tupla_actual,cerrados,adjMatrix).slice(0);
 					}else if(abiertos.length==0){
-						explicacion=explicacion+"La lista de cerrados no cambia (por lo que el nodo que iba a cerrados era peor que el nuevo o ya estaba visitado) y la lista de nodos abiertos esta vacia (en la siguiente iteracion no podemos abrir nodos que mejoren lo que ya habiamos abierto previamente), se ha detectado que se va a producir un ciclo infinito si insertamos el(los) hijo(s) de "+this.getNodeId(node_ids,tupla_actual[1])+".\n\n"+explicacion;////////////////
+						explicacion_es=explicacion_es+"La lista de cerrados no cambia (por lo que el nodo que iba a cerrados era peor que el nuevo o ya estaba visitado) y la lista de nodos abiertos esta vacia (en la siguiente iteracion no podemos abrir nodos que mejoren lo que ya habiamos abierto previamente), se ha detectado que se va a producir un ciclo infinito si insertamos el(los) hijo(s) de "+this.getNodeId(node_ids,tupla_actual[1])+".\n\n"+explicacion_es;////////////////
+						explicacion_en=explicacion_en+"Closed nodes list doesn't change (for this reason, the node going to closed list was worse than the new one or the one was already visited) and open nodes list is empty ( in the next iteration is not possible to open any node that improve the nodes previously opened), it was detected that an infinite cycle is going to occur if son(s) node(s) of "+this.getNodeId(node_ids,tupla_actual[1])+" is/are inserted.\n\n"+explicacion_en;////////////////
+						
 						contador_pasos+=1;
-						explicacion="Paso "+contador_pasos+":\n"+explicacion;
-						this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+						explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+						explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+						this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+						this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 						this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-						this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+						this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+						this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 						
 						break;
 					}	
@@ -1659,7 +1897,8 @@ class Algorithms{
 				var nhijos=hijos.length;
 
 				if(nhijos>0){
-					explicacion="\n"+explicacion;////////////////
+					explicacion_es="\n"+explicacion_es;////////////////
+					explicacion_en="\n"+explicacion_en;////////////////
 				}
 
 				//Inserto los hijos
@@ -1676,26 +1915,31 @@ class Algorithms{
 					index_in_closed=this.isNodeInList(tupla_insert[1],cerrados);
 
 					if(index_in_open==-1 && index_in_closed==-1){//El nodo actual no esta en la lista de abiertos ni en cerrados
-						explicacion="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion;////////////////
+						explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_insert)+" en la lista de abiertos.\n"+explicacion_es;////////////////
+						explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_insert)+" into opened nodes list.\n"+explicacion_en;////////////////
 						abiertos.push(tupla_insert);//Inserto los hijos desde la primera posicion (en orden) en la lista de abiertos.
 					}else if(index_in_open!=-1){//Actualizo el nodo en abiertos para que solo este el mejor camino a ese nodo
 						if(abiertos[index_in_open][2]>tupla_insert[2]){
 
-							explicacion="[ACTUALIZACION EN ABIERTOS] El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba abierto, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_insert[0])+". Cambio "+this.getTupleAsString(node_ids,abiertos[index_in_open])+" por "+this.getTupleAsString(node_ids,tupla_insert)+".\n"+explicacion;////////////////
+							explicacion_es="[ACTUALIZACION EN ABIERTOS] El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba abierto, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_insert[0])+". Cambio "+this.getTupleAsString(node_ids,abiertos[index_in_open])+" por "+this.getTupleAsString(node_ids,tupla_insert)+".\n"+explicacion_es;////////////////
+							explicacion_en="[UPDATE IN OPENED NODES LIST] Node "+this.getNodeId(node_ids,tupla_insert[1])+" was already opened, but a better path was found to it going through "+this.getNodeId(node_ids,tupla_insert[0])+". Change "+this.getTupleAsString(node_ids,abiertos[index_in_open])+" by "+this.getTupleAsString(node_ids,tupla_insert)+".\n"+explicacion_en;////////////////
 							abiertos[index_in_open]=tupla_insert;
 
 						}else{
-							explicacion="El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba abierto, pero aunque he encontrado un camino alternativo (pasando por "+this.getNodeId(node_ids,tupla_insert[0])+"), no mejora el coste del camino actual. Me quedo con el que tenia.\n"+explicacion;////////////////
+							explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba abierto, pero aunque he encontrado un camino alternativo (pasando por "+this.getNodeId(node_ids,tupla_insert[0])+"), no mejora el coste del camino actual. Me quedo con el que tenia.\n"+explicacion_es;////////////////
+							explicacion_en="Node "+this.getNodeId(node_ids,tupla_insert[1])+" was already opened, but although an alternative path was found (going through "+this.getNodeId(node_ids,tupla_insert[0])+"), doesn't improve current path cost. Keep the current path.\n"+explicacion_en;////////////////
 						}
 					}else if(index_in_closed!=-1){//Actualizo el nodo en abiertos para que solo este el mejor camino a ese nodo
 						if(cerrados[index_in_closed][2]>tupla_insert[2]){
-							explicacion="[ACTUALIZACION EN CERRADOS] El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba cerrado, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_insert[0])+". Cambio "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" por "+this.getTupleAsString(node_ids,tupla_insert)+". Propago la actualización.\n"+explicacion;////////////////
+							explicacion_es="[ACTUALIZACION EN CERRADOS] El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba cerrado, pero he encontrado un mejor camino a el pasando por "+this.getNodeId(node_ids,tupla_insert[0])+". Cambio "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" por "+this.getTupleAsString(node_ids,tupla_insert)+". Propago la actualización.\n"+explicacion_es;////////////////
+							explicacion_en="[UPDATE IN CLOSED NODES LIST] Node "+this.getNodeId(node_ids,tupla_insert[1])+" was already closed, but a better path was found to it going through  "+this.getNodeId(node_ids,tupla_insert[0])+". Change "+this.getTupleAsString(node_ids,cerrados[index_in_closed])+" by "+this.getTupleAsString(node_ids,tupla_insert)+". Propagate update.\n"+explicacion_en;////////////////
 							cerrados[index_in_closed]=tupla_insert;
 							//COMENTAR ESTO SI FALLA EN ALGUN CASO EL ALGORITMO CON LAS PROPAGACIONES
 							cerrados=this.propagate_changes(tupla_insert,cerrados,adjMatrix).slice(0);
 
 						}else{
-							explicacion="El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba cerrado, pero aunque he encontrado un camino alternativo (pasando por "+this.getNodeId(node_ids,tupla_insert[0])+"), no mejora el coste del camino actual. Me quedo con el que tenia.\n"+explicacion;////////////////
+							explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_insert[1])+" ya estaba cerrado, pero aunque he encontrado un camino alternativo (pasando por "+this.getNodeId(node_ids,tupla_insert[0])+"), no mejora el coste del camino actual. Me quedo con el que tenia.\n"+explicacion_es;////////////////
+							explicacion_en="Node "+this.getNodeId(node_ids,tupla_insert[1])+" was already closed, but although an alternative path was found (going through "+this.getNodeId(node_ids,tupla_insert[0])+"), doesn't improve current path cost. Keep the current path.\n"+explicacion_en;////////////////
 						}
 					}
 
@@ -1707,10 +1951,16 @@ class Algorithms{
 				abiertos.sort(function(x, y){return x[1] > y[1];}); //ORDENO POR ORDEN LEXICOGRAFICO PARA CRITERIO DE DESEMPATE
 			
 				contador_pasos+=1;
-				explicacion="Paso "+contador_pasos+":\n"+explicacion;
-				this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+				explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+				explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+				this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+				this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-				this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+				this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 
 				if(this.isInList(tupla_actual[1],nodos_finales)==-1){//Si el nodo de la tupla actual (nodo hijo de la tupla actual) NO es un nodo final lo meto en abiertos, si no, termino.
 					if(abiertos.length>0){
@@ -1721,28 +1971,43 @@ class Algorithms{
 							}
 						}
 						g_component_actual=tupla_actual[2];
-						explicacion="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual, por tener la menor funcion heuristica (o por criterio de desempate: orden lexicografico)\n\n"+explicacion;////////////////
+						explicacion_es="Cojo "+this.getTupleAsString(node_ids,tupla_actual)+" como tupla actual, por tener la menor funcion heuristica (o por criterio de desempate: orden lexicografico)\n\n"+explicacion_es;////////////////
+						explicacion_en="Assign "+this.getTupleAsString(node_ids,tupla_actual)+" as current tuple, because it has the smaller heuristic function (or tie-break criterion: lexicographic order)\n\n"+explicacion_en;////////////////
 						
 					}
 				}else{
-					explicacion="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion;////////////////
+					explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" es nodo final, he terminado.\n"+explicacion_es;////////////////
+					explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" is end node, algorithm finishes.\n"+explicacion_en;////////////////
 					
 					contador_pasos+=1;
-					explicacion="Paso "+contador_pasos+":\n"+explicacion;
-					this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+					explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+					explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+					this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+					this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 					this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-					this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+					this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+					this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 				}
 			
-				explicacion="\n"+explicacion;////////////////
+				explicacion_es="\n"+explicacion_es;
+				explicacion_en="\n"+explicacion_en;////////////////
 				
 			
 			}else{//Si el nodo que ibamos a meter en abiertos estaba previamente en cerrados, debemos romper el bucle, pues hemos detectado un ciclo.
 				contador_pasos+=1;
-				explicacion="Paso "+contador_pasos+":\n"+explicacion;
-				this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+				explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+				explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+				this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+				this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 				this.network_steps.push(this.getNetworkStep(node_data,edge_data,abiertos,cerrados,node_ids,tupla_actual,adjMatrix));
-				this.open_closed_steps.push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+
+				this.open_closed_steps['language_es'].push("ABIERTOS:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCERRADOS:\n"+this.getListAsString(node_ids,cerrados));
+				this.open_closed_steps['language_en'].push("OPENED:\n"+this.getListAsString(node_ids,abiertos)+"\n\nCLOSED:\n"+this.getListAsString(node_ids,cerrados));
 				
 
 
@@ -1814,9 +2079,12 @@ class Algorithms{
 			camino.reverse();
 			//FIN OBTENCION DEL CAMINO POR NOMBRES
 			
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
+
 		}else{
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps.length-1]="No fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps.length-1]="Failed finding a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
 		}
 		return {descriptions: this.string_descriptions_steps, steps: this.network_steps, lists: this.open_closed_steps};
 	}
@@ -2190,13 +2458,13 @@ class Algorithms{
 
 
 
-
+	//Translated
 	retroactiveSearch(network_nodes,network_edges,initial_node_id,end_nodes_id,iter_bound){
 		var contador_pasos=0;
 
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 
 		//OBTENCION DE ID DE NODOS Y VALOR HEURISTICO
 		var node_data = network_nodes.get({
@@ -2246,13 +2514,21 @@ class Algorithms{
 
 		var tupla_actual=[nodo_inicial,0]; //(nodo actual,numero de hijos abiertos)
 		lista_pasos.push(tupla_actual);
-		var explicacion="Se expande el nodo inicial "+this.getNodeId(node_ids,tupla_actual[0])+".";////////////////
+		var explicacion_es="Se expande el nodo inicial: "+this.getNodeId(node_ids,tupla_actual[0])+".";////////////////
+		var explicacion_en="Start node is expanded: "+this.getNodeId(node_ids,tupla_actual[0])+".";////////////////
 		
 		contador_pasos+=1;
-		explicacion="Paso "+contador_pasos+":\n"+explicacion;
-		this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+		explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+		explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+		this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+		this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 		this.network_steps.push(this.getNetworkStepRetroactiveSearch(node_data,edge_data,node_ids,lista_pasos,adjMatrix));
-		this.open_closed_steps.push("Lista de nodos:\n"+this.getListAsStringRetroactiveSearch(node_ids,lista_pasos));
+
+		this.open_closed_steps['language_es'].push("Lista de nodos:\n"+this.getListAsStringRetroactiveSearch(node_ids,lista_pasos));
+		this.open_closed_steps['language_en'].push("Node list:\n"+this.getListAsStringRetroactiveSearch(node_ids,lista_pasos));
 		
 		var bound_cont=0;
 		var index_last_paso=0;
@@ -2265,7 +2541,9 @@ class Algorithms{
 			var hijo=this.getNthSonNode(adjMatrix,tupla_actual[0],num_hijo);
 			
 			while(this.isNodeVisitedRetroactiveSearch(hijo,lista_pasos)!=-1){//Mientras que el hijo ya este abierto, genero el siguiente hijo
-				explicacion="El nodo "+this.getNodeId(node_ids,hijo)+" hijo de "+this.getNodeId(node_ids,tupla_actual[0])+" ya habia sido expandido, genero el siguiente hijo.\n\n"+explicacion;////////////////
+				explicacion_es="El nodo "+this.getNodeId(node_ids,hijo)+" hijo de "+this.getNodeId(node_ids,tupla_actual[0])+" ya habia sido expandido, genero el siguiente hijo.\n\n"+explicacion_es;////////////////
+				explicacion_en="Node "+this.getNodeId(node_ids,hijo)+", son of "+this.getNodeId(node_ids,tupla_actual[0])+" have been already expanded, Generating the next son node.\n\n"+explicacion_en;////////////////
+				
 				num_hijo+=1;
 				hijo=this.getNthSonNode(adjMatrix,tupla_actual[0],num_hijo);	
 			}
@@ -2275,25 +2553,34 @@ class Algorithms{
 				//Actualizo la tupla actual
 				lista_pasos[index_last_paso][1]+=1
 				index_last_paso+=1;
-				explicacion="Se expande el nodo "+this.getNodeId(node_ids,hijo)+", hijo de "+this.getNodeId(node_ids,tupla_actual[0])+". Se anota que "+this.getNodeId(node_ids,tupla_actual[0])+" ha expandido un hijo mas y elegimos como tupla actual "+this.getTupleAsStringRetroactiveSearch(node_ids,lista_pasos[index_last_paso])+".\n\n"+explicacion;////////////////
+				explicacion_es="Se expande el nodo "+this.getNodeId(node_ids,hijo)+", hijo de "+this.getNodeId(node_ids,tupla_actual[0])+". Se anota que "+this.getNodeId(node_ids,tupla_actual[0])+" ha expandido un hijo mas y elegimos como tupla actual "+this.getTupleAsStringRetroactiveSearch(node_ids,lista_pasos[index_last_paso])+".\n\n"+explicacion_es;////////////////
+				explicacion_en="Node "+this.getNodeId(node_ids,hijo)+", son of "+this.getNodeId(node_ids,tupla_actual[0])+" is expanded. Take note that "+this.getNodeId(node_ids,tupla_actual[0])+" has expanded one more son and assign "+this.getTupleAsStringRetroactiveSearch(node_ids,lista_pasos[index_last_paso])+" as current tuple.\n\n"+explicacion_en;////////////////
 			}else{
 				lista_pasos.splice(index_last_paso, 1);
 				index_last_paso-=1;
-				explicacion="El nodo "+this.getNodeId(node_ids,tupla_actual[0])+" no tiene mas hijos. Realizamos backtracking.\n\n"+explicacion;////////////////
+				explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_actual[0])+" no tiene mas hijos. Realizamos backtracking.\n\n"+explicacion_es;////////////////
+				explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[0])+" has no more son nodes. We do backtracking.\n\n"+explicacion_en;////////////////
 			}
 
 			if(lista_pasos.length>0){
 				tupla_actual=lista_pasos[index_last_paso];
 			}else{
-				explicacion="La lista de nodos esta vacia y no se puede continuar.\n\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n"+explicacion;////////////////
+				explicacion_es="La lista de nodos esta vacia y no se puede continuar.\n\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n"+explicacion_es;////////////////
+				explicacion_en="Node list is empty and algorithm cannot continue.\n\nFailed finding a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n"+explicacion_en;////////////////
 				hay_camino=false;
 			}
 
 			contador_pasos+=1;
-			explicacion="Paso "+contador_pasos+":\n"+explicacion;
-			this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+			explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+			explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+			this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+			this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 			this.network_steps.push(this.getNetworkStepRetroactiveSearch(node_data,edge_data,node_ids,lista_pasos,adjMatrix));
-			this.open_closed_steps.push("Lista de nodos:\n"+this.getListAsStringRetroactiveSearch(node_ids,lista_pasos));
+
+			this.open_closed_steps['language_es'].push("Lista de nodos:\n"+this.getListAsStringRetroactiveSearch(node_ids,lista_pasos));
+			this.open_closed_steps['language_en'].push("Node list:\n"+this.getListAsStringRetroactiveSearch(node_ids,lista_pasos));
 			
 			bound_cont+=1;
 			if(bound_cont==iter_bound){
@@ -2311,7 +2598,9 @@ class Algorithms{
 			}
 			camino.push( this.getNodeId(node_ids,lista_pasos[index_last_paso][0]) );
 
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];	
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
+
 		}
 
 		return {descriptions: this.string_descriptions_steps, steps: this.network_steps, lists: this.open_closed_steps};
@@ -2387,7 +2676,7 @@ class Algorithms{
 
 
 
-	////////////////////////////////////////////////////////////////FUNCIONES ESPECIALES PARA BUSQUEDA RETROACTIVA////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////FUNCIONES ESPECIALES PARA CLIMBING////////////////////////////////////////////////////////////////
 
 
 	getNetworkStepClimbing(node_data,edge_data,node_ids,step_list,adjMatrix){
@@ -2468,7 +2757,7 @@ class Algorithms{
 	}
 
 
-	//////////////////////////////////////////////////////////////FIN FUNCIONES ESPECIALES PARA BUSQUEDA RETROACTIVA//////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////FIN FUNCIONES ESPECIALES PARA CLIMBING//////////////////////////////////////////////////////////////
 
 
 
@@ -2476,9 +2765,9 @@ class Algorithms{
 	simpleClimbing(network_nodes,network_edges,initial_node_id,end_nodes_id,iter_bound){
 		var contador_pasos=0;
 
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 
 		//OBTENCION DE ID DE NODOS Y VALOR HEURISTICO
 		var node_data = network_nodes.get({
@@ -2528,14 +2817,21 @@ class Algorithms{
 		
 		var tupla_actual=[null, nodo_inicial,node_heuristics[nodo_inicial] ]; //(nodo actual,numero de hijos abiertos)
 		lista_pasos.push(tupla_actual);
-		var explicacion="Se expande el nodo inicial "+this.getNodeId(node_ids,tupla_actual[1])+".\n\n";////////////////
-		
+		var explicacion_es="Se expande el nodo inicial "+this.getNodeId(node_ids,tupla_actual[1])+".\n\n";////////////////
+		var explicacion_en="Start node is expanded: "+this.getNodeId(node_ids,tupla_actual[1])+".\n\n";////////////////
 
 		contador_pasos+=1;
-		explicacion="Paso "+contador_pasos+":\n"+explicacion;
-		this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+		explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+		explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+		this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+		this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 		this.network_steps.push(this.getNetworkStepClimbing(node_data,edge_data,node_ids,lista_pasos,adjMatrix));
-		this.open_closed_steps.push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
+		
+		this.open_closed_steps['language_es'].push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
+		this.open_closed_steps['language_en'].push("Node list:\n"+this.getListAsString(node_ids,lista_pasos));
 
 		var bound_cont=0;
 		var index_last_paso=0;
@@ -2566,21 +2862,33 @@ class Algorithms{
 
 				if(primer_mejor_hijo==null){ //Ningun hijo ha mejorado la heuristica del padre
 					hay_camino=false;
-					explicacion="Ningun hijo del nodo "+this.getNodeId(node_ids,tupla_actual[1])+" mejora su heuristica. El algoritmo queda atrapado en un maximo local.\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+explicacion;////////////////
+					explicacion_es="Ningun hijo del nodo "+this.getNodeId(node_ids,tupla_actual[1])+" mejora su heuristica. El algoritmo queda atrapado en un maximo local.\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+explicacion_es;////////////////
+					explicacion_en="None of the sons of node "+this.getNodeId(node_ids,tupla_actual[1])+" improve its heuristic. Algorithm gets stuck in a local maximum.\nFailed to find a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n\n"+explicacion_en;////////////////
+					
 				}else{ //Algun hijo ha mejorado la heuristica del padre
 					tupla_actual=lista_pasos[index_last_paso];
-					explicacion="El primer hijo de "+this.getNodeId(node_ids,tupla_actual[0])+" que mejora su heuristica es "+this.getNodeId(node_ids,tupla_actual[1])+". Se coge como tupla actual "+this.getTupleAsString(node_ids,tupla_actual)+".\n\n"+explicacion;////////////////
+					explicacion_es="El primer hijo de "+this.getNodeId(node_ids,tupla_actual[0])+" que mejora su heuristica es "+this.getNodeId(node_ids,tupla_actual[1])+". Se coge como tupla actual "+this.getTupleAsString(node_ids,tupla_actual)+".\n\n"+explicacion_es;////////////////
+					explicacion_en="First son of "+this.getNodeId(node_ids,tupla_actual[0])+" that improve its heuristic is "+this.getNodeId(node_ids,tupla_actual[1])+". It is assigned as current tuple "+this.getTupleAsString(node_ids,tupla_actual)+".\n\n"+explicacion_en;////////////////
 				}
 			}else{
 				hay_camino=false;
-				explicacion="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" no tiene hijos y el algoritmo queda atrapado. No se puede continuar.\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+explicacion;////////////////
+				explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" no tiene hijos y el algoritmo queda atrapado. No se puede continuar.\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+explicacion_es;////////////////
+				explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" has no child and algorithm gets stuck. It Cannot continue.\nFailed to find a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n\n"+explicacion_en;////////////////
+
 			}
 
 			contador_pasos+=1;
-			explicacion="Paso "+contador_pasos+":\n"+explicacion;
-			this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+			explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+			explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+			this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+			this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 			this.network_steps.push(this.getNetworkStepClimbing(node_data,edge_data,node_ids,lista_pasos,adjMatrix));
-			this.open_closed_steps.push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
+			
+			this.open_closed_steps['language_es'].push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
+			this.open_closed_steps['language_en'].push("Node list:\n"+this.getListAsString(node_ids,lista_pasos));
+			
 			
 			if(!hay_camino){
 				break;
@@ -2604,7 +2912,10 @@ class Algorithms{
 			}
 			camino.push( this.getNodeId(node_ids,lista_pasos[index_last_paso][1]) );
 
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];	
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];
+
+			
 		}
 		return {descriptions: this.string_descriptions_steps, steps: this.network_steps, lists: this.open_closed_steps};
 
@@ -2664,9 +2975,9 @@ class Algorithms{
 	maxClimbing(network_nodes,network_edges,initial_node_id,end_nodes_id,iter_bound){
 		var contador_pasos=0;
 
-		this.string_descriptions_steps=[];
+		this.string_descriptions_steps={'language_es':[],'language_en':[]};
 		this.network_steps=[];
-		this.open_closed_steps=[];
+		this.open_closed_steps={'language_es':[],'language_en':[]};
 
 		//OBTENCION DE ID DE NODOS Y VALOR HEURISTICO
 		var node_data = network_nodes.get({
@@ -2716,14 +3027,21 @@ class Algorithms{
 		
 		var tupla_actual=[null, nodo_inicial,node_heuristics[nodo_inicial] ]; //(nodo actual,numero de hijos abiertos)
 		lista_pasos.push(tupla_actual);
-		var explicacion="Se expande el nodo inicial "+this.getNodeId(node_ids,tupla_actual[1])+".";////////////////
-		
+		var explicacion_es="Se expande el nodo inicial "+this.getNodeId(node_ids,tupla_actual[1])+".";////////////////
+		var explicacion_en="Start node is expanded "+this.getNodeId(node_ids,tupla_actual[1])+".";////////////////
 
 		contador_pasos+=1;
-		explicacion="Paso "+contador_pasos+":\n"+explicacion;
-		this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+
+		explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+		explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+		this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+		this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 		this.network_steps.push(this.getNetworkStepClimbing(node_data,edge_data,node_ids,lista_pasos,adjMatrix));
-		this.open_closed_steps.push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
+		
+		this.open_closed_steps['language_es'].push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
+		this.open_closed_steps['language_en'].push("Node list:\n"+this.getListAsString(node_ids,lista_pasos));
 
 		var bound_cont=0;
 		var index_last_paso=0;
@@ -2754,23 +3072,32 @@ class Algorithms{
 
 				if(mejor_hijo==null){ //Ningun hijo ha mejorado la heuristica del padre
 					hay_camino=false;
-					explicacion="Ningun hijo del nodo "+this.getNodeId(node_ids,tupla_actual[1])+" mejora su heuristica. El algoritmo queda atrapado en un maximo local.\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+explicacion;////////////////
+					explicacion_es="Ningun hijo del nodo "+this.getNodeId(node_ids,tupla_actual[1])+" mejora su heuristica. El algoritmo queda atrapado en un maximo local.\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+explicacion_es;////////////////
+					explicacion_en="None of the sons of node "+this.getNodeId(node_ids,tupla_actual[1])+" improve its heuristic. Algorithm gets stuck in a local maximum.\nFailed to find a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n\n"+explicacion_en;////////////////
 				}else{ //Algun hijo ha mejorado la heuristica del padre
 					lista_pasos.push([ tupla_actual[1],mejor_hijo,node_heuristics[ mejor_hijo ] ]);
 					index_last_paso+=1;
 					tupla_actual=lista_pasos[index_last_paso];
-					explicacion="El hijo de "+this.getNodeId(node_ids,tupla_actual[0])+" que tiene mejor heuristica mejorando a su padre es "+this.getNodeId(node_ids,tupla_actual[1])+". Se coge como tupla actual "+this.getTupleAsString(node_ids,tupla_actual)+".\n\n"+explicacion;////////////////
+					explicacion_es="El hijo de "+this.getNodeId(node_ids,tupla_actual[0])+" que tiene mejor heuristica mejorando a su padre es "+this.getNodeId(node_ids,tupla_actual[1])+". Se coge como tupla actual "+this.getTupleAsString(node_ids,tupla_actual)+".\n\n"+explicacion_es;////////////////
+					explicacion_en="The son of "+this.getNodeId(node_ids,tupla_actual[0])+" that has better heuristic, improving its parent is "+this.getNodeId(node_ids,tupla_actual[1])+". It is assigned as current tuple "+this.getTupleAsString(node_ids,tupla_actual)+".\n\n"+explicacion_en;////////////////
 				}
 			}else{
 				hay_camino=false;
-				explicacion="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" no tiene hijos y el algoritmo queda atrapado. No se puede continuar.\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+explicacion;////////////////
+				explicacion_es="El nodo "+this.getNodeId(node_ids,tupla_actual[1])+" no tiene hijos y el algoritmo queda atrapado. No se puede continuar.\nNo fue posible encontrar un camino entre "+initial_node_id+" y algun nodo final: "+end_nodes_id+".\n\n"+explicacion_es;////////////////
+				explicacion_en="Node "+this.getNodeId(node_ids,tupla_actual[1])+" has no child and algorithm gets stuck. It Cannot continue.\nFailed to find a path between "+initial_node_id+" and any end node: "+end_nodes_id+".\n\n"+explicacion_en;////////////////
 			}
 
 			contador_pasos+=1;
-			explicacion="Paso "+contador_pasos+":\n"+explicacion;
-			this.string_descriptions_steps.push(explicacion);//Incluir explicaciones en la resolucion
+			explicacion_es="Paso "+contador_pasos+":\n"+explicacion_es;
+			explicacion_en="Step "+contador_pasos+":\n"+explicacion_en;
+
+			this.string_descriptions_steps['language_es'].push(explicacion_es);//Incluir explicaciones en la resolucion
+			this.string_descriptions_steps['language_en'].push(explicacion_en);//Incluir explicaciones en la resolucion
+
 			this.network_steps.push(this.getNetworkStepClimbing(node_data,edge_data,node_ids,lista_pasos,adjMatrix));
-			this.open_closed_steps.push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
+			
+			this.open_closed_steps['language_es'].push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
+			this.open_closed_steps['language_en'].push("Lista de nodos:\n"+this.getListAsString(node_ids,lista_pasos));
 			
 			if(!hay_camino){
 				break;
@@ -2794,7 +3121,8 @@ class Algorithms{
 			}
 			camino.push( this.getNodeId(node_ids,lista_pasos[index_last_paso][1]) );
 
-			this.string_descriptions_steps[this.string_descriptions_steps.length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n"+this.string_descriptions_steps[this.string_descriptions_steps.length-1];	
+			this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1]="El camino encontrado es: "+camino+", con coste: "+coste+".\n"+this.string_descriptions_steps['language_es'][this.string_descriptions_steps['language_es'].length-1];
+			this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1]="Path found: "+camino+", with cost: "+coste+".\n"+this.string_descriptions_steps['language_en'][this.string_descriptions_steps['language_en'].length-1];	
 		}
 		return {descriptions: this.string_descriptions_steps, steps: this.network_steps, lists: this.open_closed_steps};
 	}

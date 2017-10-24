@@ -25,6 +25,98 @@ class Interface_Handler{
 	}
 	
 
+	initialization(){
+		$("#import-network-input").val("");
+		$("#submenu").hide();
+		//Resetear el formulario de dibujar cuando se recarga la pagina:
+		this.resetForm();
+		
+	    //FIN RESETEO FORMULARIO
+		$("#resolution").hide();
+		$("#import-network-btn").prop("disabled",true);
+		$("#import-network-input").on("change",$.proxy(this.readSingleFile,this)); //Ligamos la funcion readSingleFile al contexto this(Interface_Handler)
+
+
+		$("#close-resolution-mode").hide();
+		$("#heuristic-generation").hide();
+
+
+		$("#network-form-div").hide();
+		$("#import-network-div").hide();
+
+
+		$("#despliegue_dibujar").click(function(){
+			$("#import-network-div").hide();
+			$("#network-form-div").toggle("slow");
+			$("#heuristic-generation").hide();
+			$("#resolution").hide();
+			//Si cierro el apartado de resolucion tengo que volver a activar el modulo para ir a resolver grafo
+			$("#end-network").fadeIn("slow");
+			$("#close-resolution-mode").fadeOut("slow");
+		});
+
+		$("#despliegue_importar").click(function(){
+			$("#network-form-div").hide();
+			$("#import-network-div").toggle("slow");
+			$("#heuristic-generation").hide();
+			$("#resolution").hide();
+			//Si cierro el apartado de resolucion tengo que volver a activar el modulo para ir a resolver grafo
+			$("#end-network").fadeIn("slow");
+			$("#close-resolution-mode").fadeOut("slow");
+			
+			//Reseteo input para no producir errores, para lo cual tengo que envolver en un formulario, resetear el mismo y desenvolver
+			$('#import-network-input').wrap('<form>').closest('form').get(0).reset();
+			$('#import-network-input').unwrap();
+			
+			// Prevent form submission
+			//$('#import-network-input').stopPropagation();
+			//$('#import-network-input').preventDefault();
+			
+			//Disable import button
+			$("#import-network-btn").prop("disabled",true);
+			$('#import-network-input').css( 'color', 'transparent' );
+
+		});
+
+		//This function allows to translate to english by default. Also, select in language dropdown english language 
+		(function(){
+			$('[data-translate]').jqTranslate('json/index',{defaultLang: 'es'});
+			//$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
+			$("#language-select").val("language-en").change();
+		})()
+
+		//This function allows to translate to english at reloading.
+		$(window).on('load', function(){
+			$("#language-select").val("language-en").change();
+		});
+
+			
+
+		var ih=this;
+		//This function allows to translate the whole page.
+		$('#language-select').change(function(){
+			var val = $("#language-select").val();
+			switch(val){
+				case 'language-es':	
+					$('[data-translate]').jqTranslate('json/index',{defaultLang:'en',forceLang:'es', asyncLangLoad:false});		
+					break;
+				case 'language-en':
+					$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
+					break;
+			}
+			ih.setLanguage(val);
+			ih.printInfo();
+			ih.translateCurrentStatus();
+			ih.translateSteps();
+		});
+
+		$('#import-network-input').change(function(){
+			$(this).css( 'color', 'white' );
+		});
+		
+
+	}
+
 
 	setLanguage(language){this.language=language;}
 	getLanguage(language){return this.language;}
@@ -793,7 +885,7 @@ class Interface_Handler{
 		                	case 'language-en': document.getElementById("act-estate-algorithm-name").textContent="Network current status: Retroactive search."; break;
 		                }
 	                }catch(err){
-	                	//alert(err);
+	                	alert(err);
 	                }
 	                
 	                break;
@@ -890,19 +982,34 @@ class Interface_Handler{
 		    	$("#heuristic-generation").hide();
 		    	this.index_step=0;
 		    	this.grafo_solucion.setContent_solution("solution_network",this.resolution.steps[this.index_step]);
-		    	document.getElementById('textarea-explanation').value=this.resolution.descriptions[this.index_step];
-		        document.getElementById('textarea-openclosed').value=this.resolution.lists[this.index_step];
+		    	this.translateSteps();
 	    	}
 	    }
 	}
 	
 
+	translateSteps(){
+		if(this.resolution != undefined){
+			switch(this.language){
+	    		case 'language-es':
+	    			document.getElementById('textarea-explanation').value=this.resolution.descriptions['language_es'][this.index_step];
+	        		document.getElementById('textarea-openclosed').value=this.resolution.lists['language_es'][this.index_step];
+	        		break;
+	        	case 'language-en':
+	        		document.getElementById('textarea-explanation').value=this.resolution.descriptions['language_en'][this.index_step];
+	        		document.getElementById('textarea-openclosed').value=this.resolution.lists['language_en'][this.index_step];
+	        		break;
+	    	}
+    	}
+	}
+
+
 	solutionStepForward(){
-		if(this.index_step<this.resolution.descriptions.length-1){
+		//language_en have the same steps that language_es, so, it is enough if we check one lenght
+		if(this.index_step<this.resolution.descriptions['language_en'].length-1){
 			this.index_step+=1;
 			this.grafo_solucion.setContent_solution("solution_network",this.resolution.steps[this.index_step]);
-	    	document.getElementById('textarea-explanation').value=this.resolution.descriptions[this.index_step];
-	        document.getElementById('textarea-openclosed').value=this.resolution.lists[this.index_step];
+			this.translateSteps();
 		}
 	}
 
@@ -910,8 +1017,7 @@ class Interface_Handler{
 		if(this.index_step>0){
 			this.index_step-=1;
 			this.grafo_solucion.setContent_solution("solution_network",this.resolution.steps[this.index_step]);
-	    	document.getElementById('textarea-explanation').value=this.resolution.descriptions[this.index_step];
-	        document.getElementById('textarea-openclosed').value=this.resolution.lists[this.index_step];
+	    	this.translateSteps();
 		}
 	}
 
@@ -919,18 +1025,17 @@ class Interface_Handler{
 		if(this.index_step!=0){
 			this.index_step=0;
 			this.grafo_solucion.setContent_solution("solution_network",this.resolution.steps[this.index_step]);
-	    	document.getElementById('textarea-explanation').value=this.resolution.descriptions[this.index_step];
-	        document.getElementById('textarea-openclosed').value=this.resolution.lists[this.index_step];
+	    	this.translateSteps();
 		}
 	}
 
 	solutionLastStep(){
-		var lstep=this.resolution.descriptions.length-1;
+		//language_en have the same steps that language_es, so, it is enough if we check one lenght
+		var lstep=this.resolution.descriptions['language_en'].length-1;
 		if(this.index_step!=lstep){
 			this.index_step=lstep;
 			this.grafo_solucion.setContent_solution("solution_network",this.resolution.steps[this.index_step]);
-	    	document.getElementById('textarea-explanation').value=this.resolution.descriptions[this.index_step];
-	        document.getElementById('textarea-openclosed').value=this.resolution.lists[this.index_step];
+	    	this.translateSteps();
 		}
 	}
 
@@ -1036,47 +1141,7 @@ class Interface_Handler{
 
 
 
-	initialization(){
-		$("#import-network-input").val("");
-		$("#submenu").hide();
-		//Resetear el formulario de dibujar cuando se recarga la pagina:
-		this.resetForm();
-		
-	    //FIN RESETEO FORMULARIO
-		$("#resolution").hide();
-		$("#import-network-btn").prop("disabled",true);
-		$("#import-network-input").on("change",$.proxy(this.readSingleFile,this)); //Ligamos la funcion readSingleFile al contexto this(Interface_Handler)
-
-
-		$("#close-resolution-mode").hide();
-		$("#heuristic-generation").hide();
-
-
-		$("#network-form-div").hide();
-		$("#import-network-div").hide();
-
-
-		$("#despliegue_dibujar").click(function(){
-			$("#import-network-div").hide();
-			$("#network-form-div").toggle("slow");
-			$("#heuristic-generation").hide();
-			$("#resolution").hide();
-			//Si cierro el apartado de resolucion tengo que volver a activar el modulo para ir a resolver grafo
-			$("#end-network").fadeIn("slow");
-			$("#close-resolution-mode").fadeOut("slow");
-		});
-
-		$("#despliegue_importar").click(function(){
-			$("#network-form-div").hide();
-			$("#import-network-div").toggle("slow");
-			$("#heuristic-generation").hide();
-			$("#resolution").hide();
-			//Si cierro el apartado de resolucion tengo que volver a activar el modulo para ir a resolver grafo
-			$("#end-network").fadeIn("slow");
-			$("#close-resolution-mode").fadeOut("slow");
-		});
-
-	}
+	
 
 
 
@@ -1428,10 +1493,6 @@ class Interface_Handler{
                 break;
         }
 	}
-
-
-
-
 
 
 

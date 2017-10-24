@@ -57,12 +57,12 @@
 				<div class="row">
 					<div class="col-md-6 logo-col">
 						<a href="http://decsai.ugr.es/">
-							<img class="img-responsive top-menu-logo col-md-12" src="img/decsai_logo.redimensionado.jpg" alt="decsai_logo"/>
+							<img class="img-responsive top-menu-logo col-md-12" src="img/decsai_logo.jpg" alt="decsai_logo"/>
 						</a>
 					</div>
 					<div class="col-md-6 logo-col">
 						<a href="http://www.ugr.es/">
-							<img class="img-responsive top-menu-logo col-md-12" src="img/ugr_logo.redimensionado.jpeg" alt="ugr_logo"/>
+							<img class="img-responsive top-menu-logo col-md-12" src="img/ugr_logo.jpeg" alt="ugr_logo"/>
 						</a>
 					</div>
 				</div>
@@ -250,7 +250,7 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-4">
-					<input type="file" id="import-network-input" name="datafile" class="btn btn-default btn-file"/>
+					<input type="file" id="import-network-input" name="datafile" class="btn btn-primary btn-file" />
 				</div>
 				<div class="col-sm-8">
 					<button id="import-network-btn" onclick="ih.importNetwork();" class="btn btn-primary">
@@ -374,7 +374,6 @@
 	</div>
 
 
-	<!--SEGUIR TRADUCIENDO DESDE AQUI-->
 
 	<div id="heuristic-generation">
 		<div class="row">
@@ -502,38 +501,6 @@
 
 	//We create the interface handler
 	ih=new Interface_Handler( $('#language-select').val() );
-
-	//This function allows to translate to english by default. Also, select in language dropdown english language 
-	(function(){
-		$('[data-translate]').jqTranslate('json/index',{defaultLang: 'es'});
-		//$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
-		$("#language-select").val("language-en").change();
-	})()
-
-	//This function allows to translate to english on load/reload page. Also, select in language dropdown english language
-	$(window).on('load', function(){
-		$("#language-select").val("language-en").change();
-		//$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
-	});
-
-	
-
-	//This function allows to translate the whole page.
-	$('#language-select').change(function(){
-		var val = $("#language-select").val();
-		switch(val){
-			case 'language-es':	
-				$('[data-translate]').jqTranslate('json/index',{defaultLang:'en',forceLang:'es', asyncLangLoad:false});		
-				break;
-			case 'language-en':
-				$('[data-translate]').jqTranslate('json/index',{defaultLang:'es',forceLang:'en', asyncLangLoad:false});
-				break;
-		}
-		ih.setLanguage(val);
-		ih.printInfo();
-		ih.translateCurrentStatus();
-
-	});
 
 
 </script>
