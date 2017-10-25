@@ -442,7 +442,7 @@ class Algorithms{
 				abiertos.splice(abiertos.indexOf(tupla_actual), 1);
 				
 				explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados.\n"+explicacion_es;////////////////
-				explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.\n"+explicacion_en;////////////////
+				explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into closed nodes list.\n"+explicacion_en;////////////////
 
 				cerrados.push(tupla_actual);
 				
@@ -774,7 +774,7 @@ class Algorithms{
 					abiertos.splice(abiertos.indexOf(tupla_actual), 1);
 					
 					explicacion_es="Inserto "+this.getTupleAsString(node_ids,tupla_actual)+" en la lista de cerrados.\n"+explicacion_es;////////////////
-					explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into opened nodes list.\n"+explicacion_en;////////////////
+					explicacion_en="Insert "+this.getTupleAsString(node_ids,tupla_actual)+" into closed nodes list.\n"+explicacion_en;////////////////
 
 					cerrados.push(tupla_actual);
 					
